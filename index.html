@@ -1,70 +1,240 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โอ๊ต บางชัน AMULET</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#111;
+    color:#fff;
+    font-family:Tahoma,sans-serif;
+}
+
+header{
+    background:linear-gradient(to bottom,#000,#1b1b1b);
+    text-align:center;
+    padding:60px 20px;
+}
+
+h1{
+    color:#d4af37;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#ddd;
+    margin-bottom:30px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+.search-box{
+    background:#1b1b1b;
+    border:1px solid #333;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+    margin-bottom:50px;
+}
+
+input{
+    width:100%;
+    max-width:320px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    margin-bottom:15px;
+}
+
+button{
+    background:#d4af37;
+    color:#000;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+#result{
+    margin-top:25px;
+    background:#222;
+    border-radius:10px;
+    padding:15px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1b1b1b;
+    border:1px solid #333;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+}
+
+footer{
+    margin-top:50px;
+    border-top:1px solid #333;
+    text-align:center;
+    padding:30px;
+    color:#ccc;
+}
+
+a{
+    color:#d4af37;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>โอ๊ต บางชัน AMULET</h1>
+
+    <p class="subtitle">
+        พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม รับประกันทุกองค์
+    </p>
+</header>
+
+<div class="container">
+
+    <div class="search-box">
+        <h2 style="color:#d4af37;">ค้นหาเลขรับประกัน</h2>
+
+        <input
+            type="text"
+            id="certNo"
+            placeholder="เช่น OBA-000001"
+        >
+
+        <br>
+
+        <button onclick="searchCert()">
+            ค้นหา
+        </button>
+
+        <div id="result">
+            กรอกเลขรับประกันเพื่อค้นหาข้อมูล
+        </div>
+    </div>
+
+    <h2 style="color:#d4af37;">
+        พระเครื่องแนะนำ
+    </h2>
+
+    <div class="grid">
+
+        <div class="card">รออัปโหลดพระองค์ที่ 1</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 2</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 3</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 4</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 5</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 6</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 7</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 8</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 9</div>
+
+    </div>
+
+</div>
+
+<footer>
+    <p>Facebook : ร้านพระเครื่อง โอ๊ต บางชัน AMULET</p>
+    <p>Line ID : jakrit39</p>
+    <p>โทรศัพท์ : 098-104-7956</p>
+</footer>
+
 <script>
-const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9003I_DGkUhx1z3ajec368wXSWvy2_ECpxSBT8cgNi4cPWyuR4QmJwidYZ7oiv2k-V8JUP0ue9Un6/pub?output=csv';
+const csvUrl =
+'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9003I_DGkUhx1z3ajec368wXSWvy2_ECpxSBT8cgNi4cPWyuR4QmJwidYZ7oiv2k-V8JUP0ue9Un6/pub?gid=0&single=true&output=csv';
 
-async function searchCert() {
-    const cert = document.getElementById('certNo').value.trim().toUpperCase();
-    const result = document.getElementById('result');
+async function searchCert(){
 
-    if (!cert) {
-        result.innerHTML = 'กรุณากรอกเลขรับประกัน';
+    const cert =
+        document.getElementById('certNo')
+        .value
+        .trim();
+
+    const result =
+        document.getElementById('result');
+
+    if(cert === ''){
+        result.innerHTML =
+            'กรุณากรอกเลขรับประกัน';
         return;
     }
 
-    result.innerHTML = 'กำลังค้นหาข้อมูล...';
+    try{
 
-    try {
-        const response = await fetch(csvUrl);
-        const text = await response.text();
+        const response =
+            await fetch(csvUrl);
 
-        // 1. แยกแถว และกรองแถวที่เป็นช่องว่างออกไปก่อน
-        const rows = text.split(/\r?\n/).filter(row => row.trim() !== '');
-        
-        // 2. แปลงข้อมูลแต่ละแถวเป็น Array คอลัมน์
-        const allData = rows.map(row => {
-            return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim());
-        });
+        const text =
+            await response.text();
 
-        // 3. ค้นหาแถวที่มีหัวข้อ 'certificate_no' เพื่อเริ่มต้นอ่านข้อมูลจริงหลังจากแถวนั้น
-        const headerIndex = allData.findIndex(row => row[0] && row[0].toLowerCase().includes('certificate_no'));
-        
-        if (headerIndex === -1) {
-            result.innerHTML = '<span style="color:#ff8080;">โครงสร้างตารางไม่ถูกต้อง (ไม่พบหัวข้อ certificate_no)</span>';
-            return;
-        }
+        const rows =
+            text.trim()
+            .split('\n')
+            .map(row => row.split(','));
 
-        // ดึงเฉพาะข้อมูลที่อยู่ใต้หัวตารางลงมา
-        const dataRows = allData.slice(headerIndex + 1);
+        const data =
+            rows.slice(1);
 
-        // 4. ค้นหาเลขรับประกัน (คอลัมน์แรก Index 0)
-        const found = dataRows.find(row => row[0] && row[0].toUpperCase() === cert);
+        const found =
+            data.find(row =>
+                row[0].trim() === cert
+            );
 
-        if (found) {
-            // เช็คว่ามีคอลัมน์รูปภาพ (Index 8 หรือคอลัมน์ที่ 9) และมีข้อมูลลิงก์ไหม
-            let imageHtml = '';
-            if (found[8] && (found[8].startsWith('http://') || found[8].startsWith('https://'))) {
-                imageHtml = `<div style="margin-top:15px;"><img src="${found[8]}" alt="รูปพระเครื่อง" style="max-width:100%; max-height:300px; border-radius:8px; border:2px solid #d4af37;"></div>`;
-            }
+        if(found){
 
             result.innerHTML = `
                 <h3 style="color:#d4af37;">
                     ✓ รับประกันแท้จากทางร้าน
                 </h3>
-                
-                ${imageHtml} <p style="margin-top:15px;"><b>เลขรับประกัน :</b> ${found[0] || '-'}</p>
-                <p><b>เกจิ :</b> ${found[1] || '-'}</p>
-                <p><b>วัด :</b> ${found[2] || '-'}</p>
-                <p><b>พิมพ์ :</b> ${found[3] || '-'}</p>
-                <p><b>เนื้อ :</b> ${found[4] || '-'}</p>
-                <p><b>วันที่ออกบัตร :</b> ${found[5] || '-'}</p>
-                <p><b>ชื่อเจ้าของ :</b> ${found[6] || '-'}</p>
+
+                <p><b>เลขรับประกัน :</b> ${found[0]}</p>
+                <p><b>ชื่อพระ :</b> ${found[1]}</p>
+                <p><b>วันที่ :</b> ${found[2]}</p>
+                <p><b>รายละเอียด :</b> ${found[3]}</p>
             `;
-        } else {
-            result.innerHTML = '<span style="color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้</span>';
+
+        }else{
+
+            result.innerHTML =
+                'ไม่พบข้อมูลเลขรับประกันนี้';
+
         }
 
-    } catch (error) {
-        console.error(error);
-        result.innerHTML = '<span style="color:#ff8080;">เกิดข้อผิดพลาดในการโหลดข้อมูล</span>';
+    }catch(error){
+
+        result.innerHTML =
+            'เกิดข้อผิดพลาดในการโหลดข้อมูล';
+
+        console.log(error);
     }
 }
 </script>
+
+</body>
+</html>

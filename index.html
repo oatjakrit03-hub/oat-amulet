@@ -206,25 +206,29 @@ async function searchCert(){
                 row[0].trim() === cert
             );
 
-        if(found){
+     ```javascript id="h36xpr"
+if(found){
 
-            result.innerHTML = `
-                <h3 style="color:#d4af37;">
-                    ✓ รับประกันแท้จากทางร้าน
-                </h3>
+    result.innerHTML = `
+        <h3 style="color:#d4af37;">
+            ✓ รับประกันแท้จากทางร้าน
+        </h3>
 
-                <p><b>เลขรับประกัน :</b> ${found[0]}</p>
-                <p><b>ชื่อพระ :</b> ${found[1]}</p>
-                <p><b>วันที่ :</b> ${found[2]}</p>
-                <p><b>รายละเอียด :</b> ${found[3]}</p>
-            `;
+        <p><b>เลขรับประกัน :</b> ${found[0]}</p>
+        <p><b>เกจิ :</b> ${found[1]}</p>
+        <p><b>วัด :</b> ${found[2]}</p>
+        <p><b>พิมพ์ :</b> ${found[3]}</p>
+        <p><b>เนื้อ :</b> ${found[4]}</p>
+        <p><b>วันที่ออกบัตร :</b> ${found[5]}</p>
+        <p><b>ชื่อเจ้าของ :</b> ${found[6]}</p>
+    `;
 
-        }else{
+}else{
+    result.innerHTML =
+        'ไม่พบข้อมูลเลขรับประกันนี้';
+}
+```
 
-            result.innerHTML =
-                'ไม่พบข้อมูลเลขรับประกันนี้';
-
-        }
 
     }catch(error){
 

@@ -1,58 +1,127 @@
 ```html
-<div class="search-box">
-    <h2>ค้นหาเลขรับประกัน</h2>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โอ๊ต บางชัน AMULET</title>
+<style>
+body{
+    margin:0;
+    background:#111;
+    color:#fff;
+    font-family:Tahoma,sans-serif;
+}
+header{
+    text-align:center;
+    padding:50px 20px;
+    background:linear-gradient(#111,#222);
+}
+.logo{
+    max-width:220px;
+    margin-bottom:20px;
+}
+h1{
+    color:#d4af37;
+    margin:10px 0;
+}
+.subtitle{
+    color:#ddd;
+}
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:30px;
+}
+.search-box{
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    margin-bottom:40px;
+}
+input{
+    width:280px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+}
+button{
+    padding:12px 20px;
+    background:#d4af37;
+    color:#000;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+.card{
+    background:#1b1b1b;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+}
+.card img{
+    width:100%;
+    border-radius:10px;
+}
+footer{
+    text-align:center;
+    padding:30px;
+    border-top:1px solid #333;
+}
+a{
+    color:#d4af37;
+}
+</style>
+</head>
+<body>
 
-    <input type="text" id="certNo"
-           placeholder="เช่น OBA-000001">
+<header>
+    <h1>โอ๊ต บางชัน AMULET</h1>
+    <p class="subtitle">
+        พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม รับประกันทุกองค์
+    </p>
+</header>
 
-    <button onclick="searchCert()">ค้นหา</button>
+<div class="container">
 
-    <div id="result" style="margin-top:20px"></div>
+    <div class="search-box">
+        <h2>ค้นหาเลขรับประกัน</h2>
+        <input type="text" placeholder="เช่น OBA-000001">
+        <button>ค้นหา</button>
+        <p style="margin-top:15px;color:#aaa">
+            ระบบค้นหาจะเปิดใช้งานหลังเชื่อม Google Sheet
+        </p>
+    </div>
+
+    <h2 style="color:#d4af37">พระเครื่องแนะนำ</h2>
+
+    <div class="grid">
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 1</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 2</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 3</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 4</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 5</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 6</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 7</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 8</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 9</div>
+    </div>
+
 </div>
 
-<script>
-const csvUrl =
-'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9003I_DGkUhx1z3ajec368wXSWvy2_ECpxSBT8cgNi4cPWyuR4QmJwidYZ7oiv2k-V8JUP0ue9Un6/pub?gid=0&single=true&output=csv';
+<footer>
+    <p>Facebook : ร้านพระเครื่อง โอ๊ต บางชัน AMULET</p>
+    <p>Line ID : jakrit39</p>
+    <p>โทร : 098-104-7956</p>
+</footer>
 
-async function searchCert(){
-    const cert =
-      document.getElementById('certNo').value.trim();
-
-    const result =
-      document.getElementById('result');
-
-    try{
-        const res = await fetch(csvUrl);
-        const text = await res.text();
-
-        const rows =
-          text.trim().split('\n').map(r => r.split(','));
-
-        const data = rows.slice(1);
-
-        const item = data.find(
-          r => r[0].trim() === cert
-        );
-
-        if(item){
-            result.innerHTML = `
-                <h3 style="color:#d4af37">
-                    ✓ รับประกันแท้จากทางร้าน
-                </h3>
-                <p><b>เลขรับประกัน:</b> ${item[0]}</p>
-                <p><b>ชื่อพระ:</b> ${item[1]}</p>
-                <p><b>วันที่:</b> ${item[2]}</p>
-                <p><b>รายละเอียด:</b> ${item[3]}</p>
-            `;
-        }else{
-            result.innerHTML =
-              '<p>ไม่พบข้อมูล</p>';
-        }
-
-    }catch(e){
-        result.innerHTML =
-          '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-    }
-}
-</script>
+</body>
+</html>
 ```

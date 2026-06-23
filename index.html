@@ -111,7 +111,6 @@ a{
 
 <header>
     <h1>โอ๊ต บางชัน AMULET</h1>
-
     <p class="subtitle">
         พระเครื่อง ที่เราจัดหาให้คุณ เปี่ยมด้วยคุณภาพและ รับประกันพระแท้ตามหลักสากลทุกองค์
     </p>
@@ -127,9 +126,7 @@ a{
             id="certNo"
             placeholder="เช่น OBC-0001"
         >
-
         <br>
-
         <button onclick="searchCert()">
             ค้นหา
         </button>
@@ -144,7 +141,6 @@ a{
     </h2>
 
     <div class="grid">
-
         <div class="card">รออัปโหลดพระองค์ที่ 1</div>
         <div class="card">รออัปโหลดพระองค์ที่ 2</div>
         <div class="card">รออัปโหลดพระองค์ที่ 3</div>
@@ -154,7 +150,6 @@ a{
         <div class="card">รออัปโหลดพระองค์ที่ 7</div>
         <div class="card">รออัปโหลดพระองค์ที่ 8</div>
         <div class="card">รออัปโหลดพระองค์ที่ 9</div>
-
     </div>
 
 </div>
@@ -165,85 +160,58 @@ a{
     <p>โทรศัพท์ : 098-104-7956</p>
 </footer>
 
-```html
 <script>
-const csvUrl =
-'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9003I_DGkUhx1z3ajec368wXSWvy2_ECpxSBT8cgNi4cPWyuR4QmJwidYZ7oiv2k-V8JUP0ue9Un6/pub?output=csv';
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9003I_DGkUhx1z3ajec368wXSWvy2_ECpxSBT8cgNi4cPWyuR4QmJwidYZ7oiv2k-V8JUP0ue9Un6/pub?output=csv';
 
 async function searchCert() {
-
-    const cert = document
-        .getElementById('certNo')
-        .value
-        .trim()
-        .toUpperCase();
-
-    const result =
-        document.getElementById('result');
+    const cert = document.getElementById('certNo').value.trim().toUpperCase();
+    const result = document.getElementById('result');
 
     if (!cert) {
-        result.innerHTML =
-            'กรุณากรอกเลขรับประกัน';
+        result.innerHTML = 'กรุณากรอกเลขรับประกัน';
         return;
     }
 
+    result.innerHTML = 'กำลังค้นหาข้อมูล...';
+
     try {
+        const response = await fetch(csvUrl);
+        const text = await response.text();
 
-        const response =
-            await fetch(csvUrl);
+        // แยกแถวโดยรองรับทั้ง \n และ \r\n
+        const rows = text.split(/\r?\n/).filter(row => row.trim() !== '');
+        
+        // ฟังก์ชันช่วยแยกคอลัมน์ CSV เผื่อในกรณีที่มีเครื่องหมายคอมมาในข้อความ
+        const data = rows.slice(1).map(row => {
+            return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim());
+        });
 
-        const text =
-            await response.text();
-
-        const rows = text
-            .trim()
-            .split('\n')
-            .map(row =>
-                row.split(',')
-            );
-
-        const data =
-            rows.slice(1);
-
-        const found =
-            data.find(row =>
-                row[0] &&
-                row[0].trim().toUpperCase() === cert
-            );
+        // ค้นหาข้อมูลโดยเทียบรหัสในคอลัมน์แรก (Index 0)
+        const found = data.find(row => row[0] && row[0].toUpperCase() === cert);
 
         if (found) {
-
             result.innerHTML = `
                 <h3 style="color:#d4af37;">
                     ✓ รับประกันแท้จากทางร้าน
                 </h3>
-
-                <p><b>เลขรับประกัน :</b> ${found[0]  '-'}</p>
-                <p><b>เกจิ :</b> ${found[1]  '-'}</p>
-                <p><b>วัด :</b> ${found[2]  '-'}</p>
-                <p><b>พิมพ์ :</b> ${found[3]  '-'}</p>
-                <p><b>เนื้อ :</b> ${found[4]  '-'}</p>
-                <p><b>วันที่ออกบัตร :</b> ${found[5]  '-'}</p>
-                <p><b>ชื่อเจ้าของ :</b> ${found[6]  '-'}</p>
+                <p><b>เลขรับประกัน :</b> ${found[0] || '-'}</p>
+                <p><b>เกจิ :</b> ${found[1] || '-'}</p>
+                <p><b>วัด :</b> ${found[2] || '-'}</p>
+                <p><b>พิมพ์ :</b> ${found[3] || '-'}</p>
+                <p><b>เนื้อ :</b> ${found[4] || '-'}</p>
+                <p><b>วันที่ออกบัตร :</b> ${found[5] || '-'}</p>
+                <p><b>ชื่อเจ้าของ :</b> ${found[6] || '-'}</p>
             `;
-
         } else {
-
-            result.innerHTML =
-                '<span style="color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้</span>';
+            result.innerHTML = '<span style="color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้</span>';
         }
 
     } catch (error) {
-
         console.error(error);
-
-        result.innerHTML =
-            '<span style="color:#ff8080;">เกิดข้อผิดพลาดในการโหลดข้อมูล</span>';
+        result.innerHTML = '<span style="color:#ff8080;">เกิดข้อผิดพลาดในการโหลดข้อมูล</span>';
     }
 }
 </script>
-```
-
 
 </body>
 </html>

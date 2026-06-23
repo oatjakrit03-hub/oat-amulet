@@ -234,15 +234,19 @@ async function searchCert() {
                 found[8].trim() !== ''
             ) {
                 html += `
-                    <img
-                        src="${found[8]}"
-                        style="
-                            max-width:300px;
-                            width:100%;
-                            margin-top:20px;
-                            border-radius:12px;
-                            border:2px solid #d4af37;
-                        "
+                    html += `
+<div style="margin-top:20px;text-align:center;">
+    <img
+        src="${found[8].trim()}"
+        style="
+            width:90%;
+            max-width:800px;
+            border-radius:12px;
+            border:2px solid #d4af37;
+        "
+    >
+</div>
+`;
                     >
                 `;
             }

@@ -1,89 +1,117 @@
-```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>โอ๊ต บางชัน AMULET</title>
+
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     background:#111;
     color:#fff;
     font-family:Tahoma,sans-serif;
 }
+
 header{
+    background:linear-gradient(to bottom,#000,#1b1b1b);
     text-align:center;
-    padding:50px 20px;
-    background:linear-gradient(#111,#222);
+    padding:60px 20px;
 }
-.logo{
-    max-width:220px;
-    margin-bottom:20px;
-}
+
 h1{
     color:#d4af37;
-    margin:10px 0;
+    margin-bottom:10px;
 }
+
 .subtitle{
     color:#ddd;
+    margin-bottom:30px;
 }
+
 .container{
-    max-width:1000px;
+    max-width:1100px;
     margin:auto;
-    padding:30px;
+    padding:30px 20px;
 }
+
 .search-box{
     background:#1b1b1b;
-    padding:25px;
+    border:1px solid #333;
     border-radius:15px;
+    padding:30px;
     text-align:center;
-    margin-bottom:40px;
+    margin-bottom:50px;
 }
+
 input{
-    width:280px;
+    width:100%;
+    max-width:320px;
     padding:12px;
     border:none;
     border-radius:8px;
+    margin-bottom:15px;
 }
+
 button{
-    padding:12px 20px;
     background:#d4af37;
     color:#000;
     border:none;
+    padding:12px 25px;
     border-radius:8px;
     font-weight:bold;
     cursor:pointer;
 }
+
+button:hover{
+    opacity:0.9;
+}
+
+#result{
+    margin-top:25px;
+    background:#222;
+    border-radius:10px;
+    padding:15px;
+}
+
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     gap:20px;
 }
+
 .card{
     background:#1b1b1b;
+    border:1px solid #333;
     border-radius:15px;
-    padding:20px;
+    padding:30px;
     text-align:center;
 }
-.card img{
-    width:100%;
-    border-radius:10px;
-}
+
 footer{
+    margin-top:50px;
+    border-top:1px solid #333;
     text-align:center;
     padding:30px;
-    border-top:1px solid #333;
+    color:#ccc;
 }
+
 a{
     color:#d4af37;
+    text-decoration:none;
 }
 </style>
 </head>
+
 <body>
 
 <header>
     <h1>โอ๊ต บางชัน AMULET</h1>
+
     <p class="subtitle">
         พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม รับประกันทุกองค์
     </p>
@@ -92,26 +120,41 @@ a{
 <div class="container">
 
     <div class="search-box">
-        <h2>ค้นหาเลขรับประกัน</h2>
-        <input type="text" placeholder="เช่น OBA-000001">
-        <button>ค้นหา</button>
-        <p style="margin-top:15px;color:#aaa">
-            ระบบค้นหาจะเปิดใช้งานหลังเชื่อม Google Sheet
-        </p>
+        <h2 style="color:#d4af37;">ค้นหาเลขรับประกัน</h2>
+
+        <input
+            type="text"
+            id="certNo"
+            placeholder="เช่น OBA-000001"
+        >
+
+        <br>
+
+        <button onclick="searchCert()">
+            ค้นหา
+        </button>
+
+        <div id="result">
+            กรอกเลขรับประกันเพื่อค้นหาข้อมูล
+        </div>
     </div>
 
-    <h2 style="color:#d4af37">พระเครื่องแนะนำ</h2>
+    <h2 style="color:#d4af37;">
+        พระเครื่องแนะนำ
+    </h2>
 
     <div class="grid">
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 1</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 2</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 3</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 4</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 5</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 6</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 7</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 8</div>
-        <div class="card">รออัปโหลดรูปพระองค์ที่ 9</div>
+
+        <div class="card">รออัปโหลดพระองค์ที่ 1</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 2</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 3</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 4</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 5</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 6</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 7</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 8</div>
+        <div class="card">รออัปโหลดพระองค์ที่ 9</div>
+
     </div>
 
 </div>
@@ -119,9 +162,79 @@ a{
 <footer>
     <p>Facebook : ร้านพระเครื่อง โอ๊ต บางชัน AMULET</p>
     <p>Line ID : jakrit39</p>
-    <p>โทร : 098-104-7956</p>
+    <p>โทรศัพท์ : 098-104-7956</p>
 </footer>
+
+<script>
+const csvUrl =
+'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9003I_DGkUhx1z3ajec368wXSWvy2_ECpxSBT8cgNi4cPWyuR4QmJwidYZ7oiv2k-V8JUP0ue9Un6/pub?gid=0&single=true&output=csv';
+
+async function searchCert(){
+
+    const cert =
+        document.getElementById('certNo')
+        .value
+        .trim();
+
+    const result =
+        document.getElementById('result');
+
+    if(cert === ''){
+        result.innerHTML =
+            'กรุณากรอกเลขรับประกัน';
+        return;
+    }
+
+    try{
+
+        const response =
+            await fetch(csvUrl);
+
+        const text =
+            await response.text();
+
+        const rows =
+            text.trim()
+            .split('\n')
+            .map(row => row.split(','));
+
+        const data =
+            rows.slice(1);
+
+        const found =
+            data.find(row =>
+                row[0].trim() === cert
+            );
+
+        if(found){
+
+            result.innerHTML = `
+                <h3 style="color:#d4af37;">
+                    ✓ รับประกันแท้จากทางร้าน
+                </h3>
+
+                <p><b>เลขรับประกัน :</b> ${found[0]}</p>
+                <p><b>ชื่อพระ :</b> ${found[1]}</p>
+                <p><b>วันที่ :</b> ${found[2]}</p>
+                <p><b>รายละเอียด :</b> ${found[3]}</p>
+            `;
+
+        }else{
+
+            result.innerHTML =
+                'ไม่พบข้อมูลเลขรับประกันนี้';
+
+        }
+
+    }catch(error){
+
+        result.innerHTML =
+            'เกิดข้อผิดพลาดในการโหลดข้อมูล';
+
+        console.log(error);
+    }
+}
+</script>
 
 </body>
 </html>
-```

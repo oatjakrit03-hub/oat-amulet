@@ -125,7 +125,7 @@ a{
         <input
             type="text"
             id="certNo"
-            placeholder="เช่น OBC-0001"
+            placeholder="เช่น OBA-000001"
         >
 
         <br>
@@ -206,7 +206,7 @@ async function searchCert(){
                 row[0].trim() === cert
             );
 
-     ```javascript id="h36xpr"
+        ```javascript id="h36xpr"
 if(found){
 
     result.innerHTML = `
@@ -221,8 +221,6 @@ if(found){
         <p><b>เนื้อ :</b> ${found[4]}</p>
         <p><b>วันที่ออกบัตร :</b> ${found[5]}</p>
         <p><b>ชื่อเจ้าของ :</b> ${found[6]}</p>
-        
-         
     `;
 
 }else{

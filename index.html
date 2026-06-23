@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -6,30 +7,76 @@
 <title>โอ๊ต บางชัน AMULET</title>
 <style>
 body{
-    background:#111;
-    color:#d4af37;
-    font-family:Tahoma,sans-serif;
-    text-align:center;
     margin:0;
+    background:#111;
+    color:#fff;
+    font-family:Tahoma,sans-serif;
 }
 header{
-    padding:40px 20px;
+    text-align:center;
+    padding:50px 20px;
+    background:linear-gradient(#111,#222);
+}
+.logo{
+    max-width:220px;
+    margin-bottom:20px;
 }
 h1{
-    font-size:42px;
+    color:#d4af37;
+    margin:10px 0;
 }
-p{
-    color:#fff;
+.subtitle{
+    color:#ddd;
 }
-.btn{
-    display:inline-block;
-    padding:15px 30px;
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:30px;
+}
+.search-box{
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    margin-bottom:40px;
+}
+input{
+    width:280px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+}
+button{
+    padding:12px 20px;
     background:#d4af37;
     color:#000;
-    text-decoration:none;
-    border-radius:10px;
-    margin-top:20px;
+    border:none;
+    border-radius:8px;
     font-weight:bold;
+    cursor:pointer;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+.card{
+    background:#1b1b1b;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+}
+.card img{
+    width:100%;
+    border-radius:10px;
+}
+footer{
+    text-align:center;
+    padding:30px;
+    border-top:1px solid #333;
+}
+a{
+    color:#d4af37;
 }
 </style>
 </head>
@@ -37,9 +84,44 @@ p{
 
 <header>
     <h1>โอ๊ต บางชัน AMULET</h1>
-    <p>พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม รับประกันทุกองค์</p>
-    <a class="btn" href="#">ค้นหาเลขรับประกัน</a>
+    <p class="subtitle">
+        พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม รับประกันทุกองค์
+    </p>
 </header>
+
+<div class="container">
+
+    <div class="search-box">
+        <h2>ค้นหาเลขรับประกัน</h2>
+        <input type="text" placeholder="เช่น OBA-000001">
+        <button>ค้นหา</button>
+        <p style="margin-top:15px;color:#aaa">
+            ระบบค้นหาจะเปิดใช้งานหลังเชื่อม Google Sheet
+        </p>
+    </div>
+
+    <h2 style="color:#d4af37">พระเครื่องแนะนำ</h2>
+
+    <div class="grid">
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 1</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 2</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 3</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 4</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 5</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 6</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 7</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 8</div>
+        <div class="card">รออัปโหลดรูปพระองค์ที่ 9</div>
+    </div>
+
+</div>
+
+<footer>
+    <p>Facebook : ร้านพระเครื่อง โอ๊ต บางชัน AMULET</p>
+    <p>Line ID : jakrit39</p>
+    <p>โทร : 098-104-7956</p>
+</footer>
 
 </body>
 </html>
+```

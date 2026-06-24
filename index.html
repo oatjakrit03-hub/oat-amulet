@@ -286,9 +286,7 @@ a{
 
 </header>
 
-    <p class="subtitle">
-        พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม พระเครื่อง ที่เราจัดหาให้คุณ เปี่ยมทั้งคุณภาพ และการันตีพระเเท้ ตามหลักสากล
-    </p>
+    
 </header>
 
 <div class="container">
@@ -411,23 +409,26 @@ async function searchCert() {
 
     </div>
 
-<div class="result-image" style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+<div class="result-image">
 
-    ${
-        found[8] && found[8].trim() !== ''
-        ? `<img src="${found[8]}"
-            onclick="openLightbox(this.src)"
-            style="width:250px; border-radius:15px; cursor:pointer; border:3px solid #d4af37;">`
-        : ''
-    }
+    <div class="slider">
 
-    ${
-        found[9] && found[9].trim() !== ''
-        ? `<img src="${found[9]}"
-            onclick="openLightbox(this.src)"
-            style="width:250px; border-radius:15px; cursor:pointer; border:3px solid #d4af37;">`
-        : ''
-    }
+        ${
+            found[8] && found[8].trim() !== ''
+            ? `<img class="slide active" src="${found[8]}" onclick="openLightbox(this.src)">`
+            : ''
+        }
+
+        ${
+            found[9] && found[9].trim() !== ''
+            ? `<img class="slide" src="${found[9]}" onclick="openLightbox(this.src)">`
+            : ''
+        }
+
+        <button class="prev" onclick="changeSlide(-1)">❮</button>
+        <button class="next" onclick="changeSlide(1)">❯</button>
+
+    </div>
 
 </div>
 

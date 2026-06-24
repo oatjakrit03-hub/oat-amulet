@@ -465,11 +465,20 @@ document.getElementById('certNo')
         searchCert();
     }
 });
+    function openLightbox(src){
+    document.getElementById("lightbox-img").src = src;
+    document.getElementById("lightbox").classList.add("show");
+}
+
+function closeLightbox(){
+    document.getElementById("lightbox").classList.remove("show");
+}
 </script>
 ```
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
     <img id="lightbox-img">
+    
 </div>
 </body>
 </html>

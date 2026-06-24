@@ -147,6 +147,72 @@ button:hover{
         text-align:center;
     }
 }
+    .container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+input{
+    width:100%;
+    max-width:350px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#fff;
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    margin-top:25px;
+}
+
+.result-layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:center;
+}
+
+.result-info{
+    text-align:left;
+    line-height:2;
+    font-size:18px;
+}
+
+.result-info p{
+    margin:8px 0;
+}
+
+.result-image{
+    text-align:center;
+}
+
+.result-image img{
+    width:100%;
+    max-width:700px;
+    border-radius:20px;
+    border:3px solid #d4af37;
+    box-shadow:0 0 35px rgba(212,175,55,.5);
+}
+
+@media(max-width:900px){
+    .result-layout{
+        grid-template-columns:1fr;
+    }
+
+    .result-info{
+        text-align:center;
+    }
+
+    .result-image img{
+        max-width:100%;
+    }
+}
 footer{
     margin-top:60px;
     border-top:1px solid #8b6b1f;
@@ -273,11 +339,12 @@ async function searchCert() {
 
         if (found) {
 
-        let html = `
+  let html = `
 <h3 style="
     color:#d4af37;
     text-align:center;
     margin-bottom:35px;
+    font-size:28px;
 ">
 ✓ รับประกันแท้จากทางร้าน
 </h3>
@@ -287,34 +354,21 @@ async function searchCert() {
     <div class="result-info">
 
         <p><b>เลขรับประกัน :</b> ${found[0] || '-'}</p>
-
-        <p><b>เกจิ :</b>
-        ${found[1] || '-'}</p>
-
-        <p><b>วัด :</b>
-        ${found[2] || '-'}</p>
-
-        <p><b>พิมพ์ :</b>
-        ${found[3] || '-'}</p>
-
-        <p><b>เนื้อ :</b>
-        ${found[4] || '-'}</p>
-
-        <p><b>วันที่ออกบัตร :</b>
-        ${found[5] || '-'}</p>
-
-        <p><b>ชื่อเจ้าของ :</b>
-        ${found[6] || '-'}</p>
-
-        <p><b>ราคา :</b>
-        ${found[7] || '-'} บาท</p>
+        <p><b>เกจิ :</b> ${found[1] || '-'}</p>
+        <p><b>วัด :</b> ${found[2] || '-'}</p>
+        <p><b>พิมพ์ :</b> ${found[3] || '-'}</p>
+        <p><b>เนื้อ :</b> ${found[4] || '-'}</p>
+        <p><b>วันที่ออกบัตร :</b> ${found[5] || '-'}</p>
+        <p><b>ชื่อเจ้าของ :</b> ${found[6] || '-'}</p>
+        <p><b>ราคา :</b> ${found[7] || '-'} บาท</p>
 
     </div>
 
     <div class="result-image">
         ${
-            found[8]
-            ? `<img src="${found[8]}">`
+            found[8] &&
+            found[8].trim() !== ''
+            ? `<img src="${found[8]}" alt="รูปพระ">`
             : ''
         }
     </div>
@@ -322,29 +376,7 @@ async function searchCert() {
 </div>
 `;
 
-            if (
-    found[8] &&
-    found[8].trim() !== ''
-) {
-    html += `
-        <img
-            src="${found[8]}"
-            style="
-                width:80%;
-                max-width:600px;
-                margin-top:25px;
-                border-radius:20px;
-                border:3px solid #d4af37;
-                box-shadow:0 0 35px rgba(212,175,55,.5);
-                display:block;
-                margin-left:auto;
-                margin-right:auto;
-            "
-        >
-    `;
-}
-
-            result.innerHTML = html;
+result.innerHTML = html;
 
         } else {
 

@@ -249,6 +249,7 @@ a{
 .lightbox.show {
     display: flex;
 }
+    
     @media (max-width:768px){
 
     .logo{
@@ -256,27 +257,30 @@ a{
         height:220px;
         margin:0 auto -15px auto;
     }
-        .grid{
-    grid-template-columns:1fr;
-}
-.card img{
-    width:100%;
-    aspect-ratio:1/1;
-    object-fit:cover;
-    display:block;
-}
-    
-header{
-    padding:20px 15px;
-}
 
-h1{
-    font-size:28px;
-}
+    .grid{
+        grid-template-columns:1fr;
+    }
 
-.subtitle{
-    font-size:16px;
-}
+    .card img{
+        width:100%;
+        aspect-ratio:1/1;
+        object-fit:cover;
+        display:block;
+    }
+
+    header{
+        padding:20px 15px;
+    }
+
+    h1{
+        font-size:28px;
+    }
+
+    .subtitle{
+        font-size:16px;
+    }
+
     .container{
         padding:20px 15px;
     }
@@ -303,6 +307,15 @@ h1{
         padding:20px 10px;
         font-size:14px;
     }
+
+    .menu{
+        justify-content:center;
+        padding:10px;
+    }
+
+    .menu a{
+        font-size:16px;
+        padding:10px 18px;
     }
 }
         .menu{
@@ -348,7 +361,6 @@ h1{
     }
 
 }
-</style>
 </style>
 </head>
 
@@ -748,7 +760,6 @@ function closeLightbox(){
     document.getElementById("lightbox").classList.remove("show");
 }
 </script>
-```
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
     <img id="lightbox-img">

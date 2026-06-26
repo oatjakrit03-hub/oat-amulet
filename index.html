@@ -32,7 +32,7 @@ header{
 }
 
 h1{
-    font-size:42px;
+    font-size:clamp(28px,5vw,42px);
     margin-top:0;
 margin-bottom:10px;
     background:linear-gradient(
@@ -50,8 +50,8 @@ margin-bottom:10px;
 
 .subtitle{
     color:#e5e5e5;
-    font-size:26px;
-    line-height:1.8;
+    font-size:clamp(16px,3vw,24px);
+    line-height:1.7;
     max-width:1000px;
     margin:0 auto 30px auto;
     text-shadow:0 0 10px rgba(255,215,0,0.15);
@@ -66,7 +66,7 @@ margin-bottom:10px;
         );
     border:1px solid #8b6b1f;
     border-radius:20px;
-    padding:35px;
+    padding:25px;
     box-shadow:
         0 0 25px rgba(212,175,55,.15);
 }
@@ -161,13 +161,8 @@ button:hover{
 }
 
 input{
-    width:100%;
-    max-width:350px;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:#fff;
-    margin-bottom:15px;
+   width:100%;
+    max-width:500px;
     font-size:16px;
 }
 
@@ -221,12 +216,12 @@ input{
     }
 }
 .logo{
-    width:550px;
-    height:550px;
+    width:min(70vw,350px);
+    height:min(70vw,350px);
     object-fit:cover;
     border-radius:50%;
     display:block;
-    margin:0 auto -40px auto;
+    margin:0 auto -20px auto;
     border:none;
     box-shadow:none;
 }
@@ -272,6 +267,60 @@ a{
 
 .lightbox.show {
     display: flex;
+}
+    @media (max-width:768px){
+
+    .logo{
+        width:220px;
+        height:220px;
+        margin:0 auto -15px auto;
+    }
+        .grid{
+    grid-template-columns:1fr;
+}
+        .card img{
+    width:100%;
+    height:auto;
+}
+}
+    @media (max-width:768px){
+header{
+    padding:20px 15px;
+}
+
+h1{
+    font-size:28px;
+}
+
+.subtitle{
+    font-size:16px;
+}
+    .container{
+        padding:20px 15px;
+    }
+
+    .search-box{
+        padding:20px;
+    }
+
+    .card{
+        padding:20px;
+    }
+
+    button{
+        width:100%;
+        padding:15px;
+    }
+
+    .result-info{
+        font-size:16px;
+        line-height:1.8;
+    }
+
+    footer{
+        padding:20px 10px;
+        font-size:14px;
+    }
 }
 </style>
 </head>

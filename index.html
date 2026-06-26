@@ -120,30 +120,6 @@ button:hover{
     box-shadow:
         0 0 15px rgba(212,175,55,.1);
 }
-.result-layout{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:40px;
-    align-items:center;
-}
-
-.result-info{
-    text-align:left;
-    line-height:2;
-    font-size:18px;
-}
-
-.result-image{
-    text-align:center;
-}
-
-.result-image img{
-    width:100%;
-    max-width:550px;
-    border-radius:20px;
-    border:3px solid #d4af37;
-    box-shadow:0 0 35px rgba(212,175,55,.5);
-}
 
 @media(max-width:900px){
     .result-layout{
@@ -161,8 +137,13 @@ button:hover{
 }
 
 input{
-   width:100%;
+    width:100%;
     max-width:500px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#fff;
+    margin-bottom:15px;
     font-size:16px;
 }
 
@@ -278,10 +259,11 @@ a{
         .grid{
     grid-template-columns:1fr;
 }
-        .card img{
+.card img{
     width:100%;
-    height:auto;
-}
+    aspect-ratio:1/1;
+    object-fit:cover;
+    display:block;
 }
     @media (max-width:768px){
 header{
@@ -338,10 +320,7 @@ h1{
     <p class="subtitle">
         พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม พระเครื่อง ที่เราจัดหาให้คุณเปี่ยมทั้งคุณภาพและ การันตีพระแท้ ตามหลักสากล
     </p>
-
-</header>
-
-    
+ 
 </header>
 
 <div class="container">

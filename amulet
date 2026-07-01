@@ -3,42 +3,317 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>พระเครื่องพร้อมเช่าบูชา | โอ๊ต บางชัน AMULET</title>
+
 <style>
-body{margin:0;font-family:Tahoma,sans-serif;background:#111;color:#fff}
-header{padding:20px;text-align:center;border-bottom:2px solid #caa74a}
-.menu{display:flex;justify-content:center;gap:12px;padding:12px;background:#111;border-bottom:1px solid #8b6b1f;flex-wrap:wrap}
-.menu a{text-decoration:none;background:linear-gradient(#fff3b0,#d4af37,#9b7610);color:#000;padding:10px 18px;border-radius:10px;font-weight:bold}
-.container{max-width:1200px;margin:auto;padding:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.card{background:#1b1b1b;border:1px solid #8b6b1f;border-radius:18px;padding:18px;text-align:center}
-.card img{width:100%;border-radius:14px;cursor:pointer}
-.price{color:#ffd700;font-size:24px;font-weight:bold}
-.status{color:#61ff61;font-weight:bold}
-.button{display:inline-block;margin-top:10px;padding:12px 18px;background:linear-gradient(#fff3b0,#d4af37,#9b7610);color:#000;text-decoration:none;border-radius:10px;font-weight:bold}
-.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);justify-content:center;align-items:center}
-.lightbox.show{display:flex}.lightbox img{max-width:90%;max-height:90%}
-</style></head><body>
-<header><h1>พระเครื่องพร้อมเช่าบูชา</h1></header>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:radial-gradient(circle at top,#2a2a2a,#000);
+    color:#fff;
+}
+
+/* Header */
+
+header{
+
+    background:linear-gradient(
+        180deg,
+        #000,
+        #151515,
+        #000
+    );
+
+    text-align:center;
+    padding:25px 20px;
+    border-bottom:2px solid #caa74a;
+}
+
+.logo{
+
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+h1{
+
+    color:#d4af37;
+    margin-top:15px;
+    margin-bottom:10px;
+}
+
+.subtitle{
+
+    color:#ddd;
+}
+
+/* Menu */
+
+.menu{
+
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:15px;
+
+    background:#111;
+
+    padding:12px;
+
+    border-top:1px solid #8b6b1f;
+    border-bottom:1px solid #8b6b1f;
+}
+
+.menu a{
+
+    text-decoration:none;
+
+    color:#000;
+
+    background:linear-gradient(
+        180deg,
+        #fff3b0,
+        #d4af37,
+        #9b7610
+    );
+
+    padding:10px 20px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+}
+
+.menu a:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* Content */
+
+.container{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:40px 20px;
+}
+
+.title{
+
+    text-align:center;
+
+    color:#d4af37;
+
+    margin-bottom:40px;
+}
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(260px,1fr));
+
+    gap:25px;
+}
+
+.card{
+
+    background:#1b1b1b;
+
+    border:1px solid #8b6b1f;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    text-align:center;
+
+    transition:.3s;
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 0 20px rgba(212,175,55,.3);
+}
+
+.card img{
+
+    width:100%;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+}
+
+.card h3{
+
+    color:#d4af37;
+}
+
+.status{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:20px;
+
+    font-weight:bold;
+
+    margin-top:10px;
+}
+
+.available{
+
+    background:#0f8c2d;
+}
+
+.sold{
+
+    background:#b30000;
+}
+
+footer{
+
+    margin-top:60px;
+
+    text-align:center;
+
+    padding:25px;
+
+    border-top:1px solid #8b6b1f;
+
+    color:#ccc;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.logo{
+
+    width:140px;
+    height:140px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<img
+src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/logo.png"
+class="logo"
+>
+
+<h1>ร้านพระเครื่อง โอ๊ต บางชัน AMULET</h1>
+
+<p class="subtitle">
+
+พระเครื่องพร้อมเช่าบูชา
+
+</p>
+
+</header>
+
 <nav class="menu">
+
 <a href="index.html">หน้าแรก</a>
-<a href="amulet.html">พระเครื่องพร้อมเช่าบูชา</a>
-<a href="about.html">เกี่ยวกับร้านและการรับประกัน</a>
+
+<a href="amulet.html">
+พระเครื่องพร้อมเช่าบูชา
+</a>
+
+<a href="about.html">
+เกี่ยวกับร้านและการรับประกัน
+</a>
+
 </nav>
+
 <div class="container">
-<h2 style="color:#d4af37">พระเครื่องพร้อมเช่าบูชาทั้งหมด</h2>
+
+<h2 class="title">
+
+พระเครื่องพร้อมเช่าบูชา
+
+</h2>
+
 <div class="grid">
+
+<!-- พระองค์ที่ 1 -->
+
 <div class="card">
-<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%80%E0%B8%88%E0%B8%A3%E0%B8%B4%E0%B8%8D%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%99%E0%B8%99%E0%B8%A7%E0%B8%B0.jpg" onclick="openLightbox(this.src)">
-<h3>เจริญพรบน หลวงปู่ทิม เนื้อนวะ</h3>
-<p class="status">🟢 พร้อมเช่าบูชา</p>
-<p>รับประกันพระแท้ตลอดชีพ</p>
-<p class="price">สอบถามราคา</p>
-<a class="button" target="_blank" href="https://line.me/ti/p/~jakrit39">สอบถามเช่าบูชา</a>
+
+<img src="รูปพระ1.jpg">
+
+<h3>
+
+เจริญพรบน หลวงปู่ทิม เนื้อนวะ
+
+</h3>
+
+<div class="status available">
+
+🟢 พร้อมเช่าบูชา
+
 </div>
-</div></div>
-<div id="lightbox" class="lightbox" onclick="this.classList.remove('show')"><img id="lb"></div>
-<script>
-function openLightbox(s){document.getElementById('lb').src=s;document.getElementById('lightbox').classList.add('show')}
-</script>
-</body></html>
+
+</div>
+
+<!-- พระองค์ที่ 2 -->
+
+<div class="card">
+
+<img src="รูปพระ2.jpg">
+
+<h3>
+
+หลวงพ่อแดง รุ่นแรก
+
+</h3>
+
+<div class="status sold">
+
+🔴 ขายแล้ว
+
+</div>
+
+</div>
+
+<!-- เพิ่มพระองค์ใหม่ด้านล่างได้เลย -->
+
+</div>
+
+</div>
+
+<footer>
+
+Facebook : ร้านพระเครื่อง โอ๊ต บางชัน AMULET
+
+<br><br>
+
+Line ID : jakrit39
+
+</footer>
+
+</body>
+</html>

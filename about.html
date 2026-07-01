@@ -101,7 +101,38 @@ h1{
 .button:hover{
     transform:scale(1.05);
 }
+.menu{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    background:#111;
+    padding:12px 20px;
+    border-top:1px solid #8b6b1f;
+    border-bottom:1px solid #8b6b1f;
+}
 
+.menu a{
+    background:linear-gradient(
+        180deg,
+        #fff3b0,
+        #d4af37,
+        #9b7610
+    );
+    color:#000;
+    text-decoration:none;
+    padding:10px 22px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    display:inline-block;
+    transition:.3s;
+}
+
+.menu a:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 15px rgba(212,175,55,.5);
+}
 @media(max-width:768px){
 
     h1{
@@ -111,6 +142,19 @@ h1{
     .card{
         padding:25px;
     }
+
+    .menu{
+        justify-content:center;
+        gap:10px;
+        padding:10px;
+        flex-wrap:wrap;
+    }
+
+    .menu a{
+        font-size:14px;
+        padding:8px 16px;
+    }
+
 }
 </style>
 </head>
@@ -123,6 +167,18 @@ h1{
         ร้านพระเครื่องคุณภาพ รับประกันพระแท้ตามหลักสากล
     </p>
 </header>
+
+<nav class="menu">
+    <a href="index.html">หน้าแรก</a>
+
+    <a href="amulet.html">
+        พระเครื่องพร้อมเช่าบูชา
+    </a>
+
+    <a href="about.html">
+        เกี่ยวกับร้านและการรับประกัน
+    </a>
+</nav>
 
 <div class="container">
 

@@ -29,6 +29,7 @@ body{
     display:flex;
     gap:10px;
     margin-top:10px;
+    flex-wrap:wrap;
 }
 
 .thumb img{
@@ -45,6 +46,8 @@ body{
     padding:15px;
     background:#1c1c1c;
     border-radius:10px;
+    line-height:1.8;
+    white-space:pre-line;
 }
 
 .btn{
@@ -59,7 +62,6 @@ body{
     font-weight:bold;
 }
 
-/* zoom */
 .zoom{
     position:fixed;
     top:0;left:0;
@@ -82,14 +84,14 @@ body{
 
 <div class="container">
 
-<h2 id="title">รายละเอียดพระ</h2>
+<h2 id="title">ไม่พบข้อมูลพระ</h2>
 
 <img id="mainImg" class="main-img" onclick="openZoom()" src="">
 
 <div class="thumb" id="thumbs"></div>
 
-<div class="box">
-<p>รายละเอียดพระเครื่องจะแสดงตรงนี้1</p>
+<div class="box" id="descBox">
+กำลังโหลดข้อมูล...
 </div>
 
 <a class="btn" id="fbBtn" target="_blank">💬 สอบถาม Facebook</a>
@@ -108,53 +110,87 @@ imgs:[
 "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/1.jpg",
 "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/2.jpg"
 ],
+desc:
+`เหรียญพ่อครัวรุ่นพิเศษ
+เนื้อทองแดงผิวไฟ
+
+รายละเอียด:
+- สภาพสวย
+- เก็บรักษาดี
+- เหมาะแก่การสะสม`,
 fb:"https://www.facebook.com/jakrit.hanphanoen"
 },
+
 p2:{
 title:"เหรียญแม่ทัพ",
 imgs:[
 "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
 "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg"
 ],
+desc:
+`เหรียญแม่ทัพไร้ดาว
+
+- รุ่นหายาก
+- นิยมในสายสะสม
+- ผิวเดิมไม่ผ่านการล้าง`,
 fb:"https://www.facebook.com/jakrit.hanphanoen"
 },
+
 p3:{
 title:"เหรียญโบสถ์ลั่น",
 imgs:[
 "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg"
 ],
+desc:
+`เหรียญโบสถ์ลั่น
+
+รายละเอียดเพิ่มเติม:
+- รุ่นยอดนิยม
+- พิธีปลุกเสกเข้มขลัง`,
 fb:"https://www.facebook.com/jakrit.hanphanoen"
 }
 };
 
+// ===== ดึง id จาก URL =====
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 const item = data[id];
 
+// ===== ถ้ามีข้อมูล =====
 if(item){
-document.getElementById("title").innerText = item.title;
-document.getElementById("mainImg").src = item.imgs[0];
-document.getElementById("fbBtn").href = item.fb;
+    document.getElementById("title").innerText = item.title;
 
-let thumbs = document.getElementById("thumbs");
+    const mainImg = document.getElementById("mainImg");
+    mainImg.src = item.imgs?.[0] || "";
 
-item.imgs.forEach(img=>{
-let el = document.createElement("img");
-el.src = img;
-el.onclick = ()=>document.getElementById("mainImg").src = img;
-thumbs.appendChild(el);
-});
+    document.getElementById("fbBtn").href = item.fb || "#";
+
+    document.getElementById("descBox").innerText = item.desc || "ไม่มีรายละเอียด";
+
+    const thumbs = document.getElementById("thumbs");
+    thumbs.innerHTML = "";
+
+    (item.imgs || []).forEach(img=>{
+        let el = document.createElement("img");
+        el.src = img;
+        el.onclick = ()=> mainImg.src = img;
+        thumbs.appendChild(el);
+    });
+
+}else{
+    document.getElementById("descBox").innerText = "ไม่พบข้อมูลพระองค์นี้";
 }
 
+// ===== zoom =====
 function openZoom(){
-document.getElementById("zoom").style.display="flex";
-document.getElementById("zoomImg").src =
-document.getElementById("mainImg").src;
+    document.getElementById("zoom").style.display="flex";
+    document.getElementById("zoomImg").src =
+    document.getElementById("mainImg").src;
 }
 
 function closeZoom(){
-document.getElementById("zoom").style.display="none";
+    document.getElementById("zoom").style.display="none";
 }
 </script>
 

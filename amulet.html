@@ -3,241 +3,300 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>พระเครื่องพร้อมเช่าบูชา</title>
+
+<title>พระเครื่องพร้อมเช่าบูชา | โอ๊ต บางชัน AMULET</title>
 
 <style>
+
+*{box-sizing:border-box;}
+
 body{
     margin:0;
-    font-family:Tahoma;
-    background:#111;
+    font-family:Tahoma,sans-serif;
+    background:radial-gradient(circle at top,#2a2a2a,#000);
     color:#fff;
 }
 
+/* Header */
 header{
+    background:linear-gradient(180deg,#000,#151515,#000);
     text-align:center;
-    padding:20px;
-    background:#000;
-    border-bottom:2px solid gold;
+    padding:25px 20px;
+    border-bottom:2px solid #caa74a;
 }
+
+.logo{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+h1{color:#d4af37;margin-top:15px;margin-bottom:10px;}
+.subtitle{color:#ddd;}
+
+/* Menu */
+.menu{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:15px;
+    background:#111;
+    padding:12px;
+    border-top:1px solid #8b6b1f;
+    border-bottom:1px solid #8b6b1f;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#000;
+    background:linear-gradient(180deg,#fff3b0,#d4af37,#9b7610);
+    padding:10px 20px;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+/* Content */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+.title{text-align:center;color:#d4af37;margin-bottom:40px;}
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    padding:20px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
 }
 
 .card{
-    background:#1c1c1c;
-    border:1px solid gold;
-    border-radius:15px;
-    overflow:hidden;
+    background:#1b1b1b;
+    border:1px solid #8b6b1f;
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
     cursor:pointer;
     transition:.3s;
-    display:flex;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 20px rgba(212,175,55,.3);
+}
+
+.card img{
+    width:100%;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.card h3{color:#d4af37;}
+
+.status{
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:20px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.available{background:#0f8c2d;}
+.sold{background:#b30000;}
+
+footer{
+    margin-top:60px;
+    text-align:center;
+    padding:25px;
+    border-top:1px solid #8b6b1f;
+    color:#ccc;
+}
+
+/* ===== LIGHTBOX ===== */
+.lightbox{
+    display:none;
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.95);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
     flex-direction:column;
 }
 
-.card:hover{transform:scale(1.03)}
-
-.img-box{
-    width:100%;
-    height:260px;
-    background:#1a1a1a;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
-    padding:12px;
-    box-sizing:border-box;
+.lightbox img{
+    max-width:90%;
+    max-height:80vh;
+    border-radius:15px;
 }
 
-.img-box img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    display:block;
-}
-
-.card:hover .img-box img{
-    transform:scale(1.05);
-}
-.card h3{
-    padding:12px 15px 5px;
-    font-size:18px;
-    margin:0;
-    min-height:48px;
-}
-
-.status{
-    padding:0 15px 15px;
-    text-align:right;
-    font-weight:bold;
-    font-size:18px;
-}
-nav{
-    display:flex;
-    justify-content:center;
-    gap:15px;
-    margin-top:15px;
-    flex-wrap:wrap;
-}
-
-nav a{
+.close{
+    position:absolute;
+    top:20px;
+    right:30px;
+    font-size:35px;
     color:#fff;
-    text-decoration:none;
-    border:1px solid gold;
-    padding:10px 18px;
-    border-radius:8px;
-    font-weight:bold;
-    transition:.3s;
+    cursor:pointer;
 }
 
-nav a:hover{
-    background:gold;
-    color:#000;
+.nav{
+    margin-top:15px;
+    display:flex;
+    gap:20px;
 }
-.available{color:#00ff7f}
-.sold{color:#ff4d4d}
 
-.add-btn{
-    display:block;
-    text-align:center;
-    margin:15px;
-    padding:12px;
-    background:gold;
-    color:#000;
-    font-weight:bold;
-    text-decoration:none;
+.nav button{
+    background:#d4af37;
+    border:none;
+    padding:10px 20px;
     border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
 }
+
+/* Messenger button */
+.messenger{
+    margin-top:15px;
+    background:#0084ff;
+    color:#fff;
+    padding:10px 18px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <header>
-
-<h2>ร้านพระเครื่อง โอ๊ต บางชัน AMULET</h2>
-<nav class="menu">
-    <a href="index.html">หน้าแรก</a>
-
-    <a href="amulet.html">
-        พระเครื่องพร้อมเช่าบูชา
-    </a>
-
-    <a href="about.html">
-        เกี่ยวกับร้านและการรับประกัน
-    </a>
-</nav>
+<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/logo.png" class="logo">
+<h1>ร้านพระเครื่อง โอ๊ต บางชัน AMULET</h1>
+<p class="subtitle">พระเครื่องพร้อมเช่าบูชา</p>
 </header>
-    
-<a class="add-btn" href="admin.html">➕ เพิ่มพระใหม่</a>
 
-<div class="grid" id="grid"></div>
+<nav class="menu">
+<a href="index.html">หน้าแรก</a>
+<a href="amulet.html">พระเครื่องพร้อมเช่าบูชา</a>
+<a href="about.html">เกี่ยวกับร้านและการรับประกัน</a>
+</nav>
+
+<div class="container">
+
+<h2 class="title">พระเครื่องพร้อมเช่าบูชา</h2>
+
+<div class="grid">
+
+<!-- CARD 1 -->
+<div class="card" onclick="openLightbox(['https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%AD%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg','https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%AD%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg','รูปพระ1-3.jpg'])">
+<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%AD%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg">
+<h3>เหรียญรุ่น2 แจกพ่อครัว เนื้ออัลปก้า หลวงพ่อแดง วัดเขาบันไดอิฐ </h3>
+<div class="status available">🔴 มีผู้เช่าบูชาแล้ว</div>
+</div>
+
+<!-- CARD 2 -->
+<div class="card" onclick="openLightbox(['https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg','https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg'])">
+<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg">
+<h3>เหรียญรุ่น แม่ทัพปี2511 บล็อก ไร้ดาว เนื้อทองแดง หลวงพ่อแดง วัดเขาบันไดอิฐ</h3>
+<div class="status sold">🟢 พร้อมเช่าบูชา</div>
+</div>
+    
+<!-- CARD 3 -->
+<div class="card" onclick="openLightbox(['https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%82%E0%B8%9A%E0%B8%96%E0%B9%8C%E0%B8%AA%E0%B8%A5%E0%B8%B1%E0%B9%88%E0%B8%99%E0%B9%84%E0%B8%A1%E0%B9%89%E0%B8%81%E0%B8%AD%E0%B8%A5%E0%B9%8C%E0%B8%9F%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpg','https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%82%E0%B8%9A%E0%B8%96%E0%B9%8C%E0%B8%AA%E0%B8%A5%E0%B8%B1%E0%B9%88%E0%B8%99%E0%B9%84%E0%B8%A1%E0%B9%89%E0%B8%81%E0%B8%AD%E0%B8%A5%E0%B9%8C%E0%B8%9F%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpg'])">
+<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%82%E0%B8%9A%E0%B8%96%E0%B9%8C%E0%B8%AA%E0%B8%A5%E0%B8%B1%E0%B9%88%E0%B8%99%E0%B9%84%E0%B8%A1%E0%B9%89%E0%B8%81%E0%B8%AD%E0%B8%A5%E0%B9%8C%E0%B8%9F%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpg">
+<h3>เหรียญรุ่น โบสถ์ลั่นปี2512 บล็อก ไร้ดาว เนื้อทองแดง หลวงพ่อแดง วัดเขาบันไดอิฐ</h3>
+<div class="status sold">🟢 พร้อมเช่าบูชา</div>
+</div>
+
+    <!-- CARD 4 -->
+<div class="card" onclick="openLightbox(['https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%A3%E0%B8%95%E0%B9%82%E0%B8%95%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg','https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%A3%E0%B8%95%E0%B9%82%E0%B8%95%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg'])">
+<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%A3%E0%B8%95%E0%B9%82%E0%B8%95%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg">
+<h3>เหรียญรุ่น รตโตปี2516 บล็อก ๑ตัน๖ชิด เนื้อทองแดง หลวงพ่อแดง วัดเขาบันไดอิฐ</h3>
+<div class="status sold">🟢 พร้อมเช่าบูชา</div>
+</div>
+
+    <!-- CARD 5 -->
+<div class="card" onclick="openLightbox(['https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%94%E0%B8%B2%E0%B8%A7%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg','https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%94%E0%B8%B2%E0%B8%A7%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg'])">
+<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%94%E0%B8%B2%E0%B8%A7%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg">
+<h3>เหรียญรุ่น แม่ทัพปี2511 บล็อก ดาวใหญ่ เนื้อทองแดง หลวงพ่อแดง วัดเขาบันไดอิฐ</h3>
+<div class="status sold">🟢 พร้อมเช่าบูชา</div>
+</div>
+
+    <!-- CARD 6 -->
+<div class="card" onclick="openLightbox(['รูปพระ2.jpg','รูปพระ2-2.jpg'])">
+<img src="รูปพระ2.jpg">
+<h3>หลวงพ่อ-</h3>
+<div class="status sold">🔴 ขายแล้ว</div>
+</div>
+    
+</div>
+</div>
+
+<footer>
+Facebook : ร้านพระเครื่อง โอ๊ต บางชัน AMULET<br><br>
+Line ID : jakrit39
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+<span class="close" onclick="closeLightbox()">×</span>
+
+<img id="lightbox-img">
+
+<div class="nav">
+<button onclick="prevImg()">⬅ ก่อนหน้า</button>
+<button onclick="nextImg()">ถัดไป ➡</button>
+</div>
+
+<a class="messenger"
+href="https://www.facebook.com/jakrit.hanphanoen/"
+target="_blank">
+💬 สอบถามผ่าน Facebook
+</a>
+
+</div>
 
 <script>
-let isAdmin = localStorage.getItem("admin") === "true";
-// ===============================
-// 1. ดึงข้อมูลจาก localStorage
-// ===============================
-let data = JSON.parse(localStorage.getItem("amulet") || "{}");
 
-// ===============================
-// 2. fallback ถ้ายังไม่มีข้อมูล
-// ===============================
-if(Object.keys(data).length === 0){
-    data = {
-        p1:{
-            title:"เหรียญรุ่นพ่อครัว",
-            img:"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/%E0%B8%9E%E0%B9%88%E0%B8%AD%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
-            status:"available"
-        },
-        p2:{
-            title:"เหรียญแม่ทัพ บล็อกไร้ดาว",
-            img:"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
-            status:"available"
-        },
-        p3:{
-            title:"เหรียญโบสถ์ลั่น",
-            img:"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg",
-            status:"sold"
-        }
-           p4:{
-            title:"เหรียญโบสถ์ลั่น1",
-            img:"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg",
-            status:"sold"
-        }
-    };
- 
+let images = [];
+let currentIndex = 0;
+
+function openLightbox(imgArray){
+    images = imgArray;
+    currentIndex = 0;
+    document.getElementById('lightbox').style.display = 'flex';
+    document.getElementById('lightbox-img').src = images[currentIndex];
 }
-function deleteAmulet(id){
-    if(!confirm("ต้องการลบพระองค์นี้ใช่ไหม?")) return;
 
-    let data = JSON.parse(localStorage.getItem("amulet") || "{}");
-
-    delete data[id];
-
-    localStorage.setItem("amulet", JSON.stringify(data));
-
-    location.reload();
+function closeLightbox(){
+    document.getElementById('lightbox').style.display = 'none';
 }
-// ===============================
-// 3. render การ์ด
-// ===============================
-const grid = document.getElementById("grid");
 
-for(let id in data){
-
-    let item = data[id];
-
-    let img = item.imgs?.[0] || item.img || "https://placehold.co/600x600?text=No+Image";
-    let title = item.title || "ไม่มีชื่อ";
-    let status = item.status || "available";
-
-    let statusText = status === "sold" ? "ขายแล้ว" : "พร้อมเช่า";
-    let statusClass = status === "sold" ? "sold" : "available";
-
-    let card = document.createElement("div");
-    card.className = "card";
-
-    card.onclick = () => {
-        window.location.href = "detail.html?id=" + id;
-    };
-
-    card.innerHTML = `
-<div class="img-box">
-
-<img src="${img}"
-onerror="this.src='https://placehold.co/600x600?text=No+Image'">
-
-</div>
-
-<h3>${title}</h3>
-
-<div class="status ${statusClass}">
-${statusText}
-</div>
-
-${isAdmin ? `
-<button onclick="event.stopPropagation(); deleteAmulet('${id}')" 
-style="
-width:100%;
-padding:10px;
-background:red;
-color:#fff;
-border:none;
-cursor:pointer;
-font-weight:bold;
-border-radius:0 0 15px 15px;
-">
-🗑️ ลบพระ
-</button>
-` : ""}
-`;
-
-    grid.appendChild(card);
+function nextImg(){
+    if(currentIndex < images.length - 1){
+        currentIndex++;
+        document.getElementById('lightbox-img').src = images[currentIndex];
+    }
 }
+
+function prevImg(){
+    if(currentIndex > 0){
+        currentIndex--;
+        document.getElementById('lightbox-img').src = images[currentIndex];
+    }
+}
+
+// ปิดเมื่อกดพื้นหลัง
+document.getElementById('lightbox').addEventListener('click', function(e){
+    if(e.target === this){
+        closeLightbox();
+    }
+});
 
 </script>
 

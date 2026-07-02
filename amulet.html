@@ -137,7 +137,7 @@ nav a:hover{
 <div class="grid" id="grid"></div>
 
 <script>
-
+let isAdmin = localStorage.getItem("admin") === "true";
 // ===============================
 // 1. ดึงข้อมูลจาก localStorage
 // ===============================
@@ -165,7 +165,17 @@ if(Object.keys(data).length === 0){
         }
     };
 }
+function deleteAmulet(id){
+    if(!confirm("ต้องการลบพระองค์นี้ใช่ไหม?")) return;
 
+    let data = JSON.parse(localStorage.getItem("amulet") || "{}");
+
+    delete data[id];
+
+    localStorage.setItem("amulet", JSON.stringify(data));
+
+    location.reload();
+}
 // ===============================
 // 3. render การ์ด
 // ===============================
@@ -202,6 +212,22 @@ onerror="this.src='https://placehold.co/600x600?text=No+Image'">
 <div class="status ${statusClass}">
 ${statusText}
 </div>
+
+${isAdmin ? `
+<button onclick="event.stopPropagation(); deleteAmulet('${id}')" 
+style="
+width:100%;
+padding:10px;
+background:red;
+color:#fff;
+border:none;
+cursor:pointer;
+font-weight:bold;
+border-radius:0 0 15px 15px;
+">
+🗑️ ลบพระ
+</button>
+` : ""}
 `;
 
     grid.appendChild(card);

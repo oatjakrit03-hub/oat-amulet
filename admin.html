@@ -2,7 +2,8 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>เพิ่มพระ</title>
+<title>Admin - เพิ่มพระ</title>
+
 <style>
 body{
     font-family:Tahoma;
@@ -10,13 +11,16 @@ body{
     color:#fff;
     padding:20px;
 }
+
 input, textarea{
     width:100%;
     padding:10px;
     margin:10px 0;
     border-radius:8px;
     border:none;
+    outline:none;
 }
+
 button{
     padding:12px;
     width:100%;
@@ -26,14 +30,37 @@ button{
     font-weight:bold;
     cursor:pointer;
 }
+
 .box{
     max-width:600px;
     margin:auto;
+}
+
+.logout{
+    position:fixed;
+    top:10px;
+    right:10px;
+    background:red;
+    color:#fff;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
 }
 </style>
 </head>
 
 <body>
+
+<!-- 🔐 กันคนไม่ login เข้า -->
+<script>
+if(localStorage.getItem("adminLogin") !== "true"){
+    window.location.href = "login.html";
+}
+</script>
+
+<!-- 🔴 ปุ่มออกจากระบบ -->
+<button class="logout" onclick="logout()">ออกจากระบบ</button>
 
 <div class="box">
 <h2>➕ เพิ่มข้อมูลพระ</h2>
@@ -50,15 +77,38 @@ button{
 </div>
 
 <script>
+
+// =======================
+// logout
+// =======================
+function logout(){
+    localStorage.removeItem("adminLogin");
+    window.location.href = "login.html";
+}
+
+// =======================
+// save data
+// =======================
 function save(){
 
-    let title = document.getElementById("title").value;
-    let desc = document.getElementById("desc").value;
-    let fb = document.getElementById("fb").value;
+    let title = document.getElementById("title").value.trim();
+    let desc = document.getElementById("desc").value.trim();
+    let fb = document.getElementById("fb").value.trim();
 
     let imgs = document.getElementById("imgs").value
         .split("\n")
-        .filter(x => x.trim() !== "");
+        .map(x => x.trim())
+        .filter(x => x !== "");
+
+    if(title === ""){
+        alert("กรุณาใส่ชื่อพระ");
+        return;
+    }
+
+    if(imgs.length === 0){
+        alert("กรุณาใส่รูปอย่างน้อย 1 รูป");
+        return;
+    }
 
     let id = "p" + Date.now();
 
@@ -73,7 +123,7 @@ function save(){
 
     localStorage.setItem("amulet", JSON.stringify(data));
 
-    alert("บันทึกแล้ว!");
+    alert("บันทึกสำเร็จ!");
 
     window.location.href = "amulet.html?id=" + id;
 }

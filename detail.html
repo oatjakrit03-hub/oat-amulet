@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายละเอียดพระ</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Tahoma;
+    background:#000;
+    color:#fff;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+.slider{
+    position:relative;
+    overflow:hidden;
+    border-radius:15px;
+    background:#111;
+}
+
+.slider img{
+    width:100%;
+    max-height:500px;
+    object-fit:contain;
+    cursor:zoom-in;
+    transition:transform .2s;
+}
+
+.btn{
+    margin-top:15px;
+    display:flex;
+    gap:10px;
+}
+
+button{
+    padding:10px 15px;
+    border:none;
+    border-radius:10px;
+    background:#d4af37;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.fb{
+    display:block;
+    margin-top:15px;
+    background:#0084ff;
+    color:#fff;
+    text-align:center;
+    padding:12px;
+    border-radius:10px;
+    text-decoration:none;
+}
+
+/* zoom */
+.zoomed{
+    transform:scale(2);
+    cursor:grab;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 id="title"></h2>
+
+<div class="slider">
+    <img id="img">
+</div>
+
+<div class="btn">
+<button onclick="prev()">⬅ ก่อนหน้า</button>
+<button onclick="next()">ถัดไป ➡</button>
+</div>
+
+<p id="desc"></p>
+
+<a class="fb" href="https://www.facebook.com/jakrit.hanphanoen/" target="_blank">
+💬 สอบถามราคาทาง Facebook
+</a>
+
+</div>
+
+<script>
+// ข้อมูลพระ
+const data = {
+p1:{
+title:"เหรียญรุ่น 2 หลวงพ่อแดง",
+desc:"เหรียญสภาพสวย ผ่านการเก็บรักษาอย่างดี เหมาะสำหรับบูชา",
+images:[
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg"
+]
+},
+
+p2:{
+title:"แม่ทัพปี 2511",
+desc:"พระแท้สายตรง สภาพเดิม",
+images:[
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg"
+]
+}
+};
+
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get("id");
+
+let index = 0;
+let current = data[id];
+
+document.getElementById("title").innerText = current.title;
+document.getElementById("desc").innerText = current.desc;
+
+const img = document.getElementById("img");
+img.src = current.images[0];
+
+// slide
+function next(){
+    index = (index + 1) % current.images.length;
+    img.src = current.images[index];
+}
+
+function prev(){
+    index = (index - 1 + current.images.length) % current.images.length;
+    img.src = current.images[index];
+}
+
+// zoom click
+img.addEventListener("click", ()=>{
+    img.classList.toggle("zoomed");
+});
+</script>
+
+</body>
+</html>

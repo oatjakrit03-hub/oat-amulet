@@ -2,131 +2,116 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Admin - เพิ่มพระ</title>
+<title>Admin Panel</title>
 
 <style>
 body{
-    font-family:Tahoma;
+    margin:0;
+    font-family:tahoma;
     background:#111;
     color:#fff;
     padding:20px;
 }
-
-input, textarea{
+input,select{
     width:100%;
     padding:10px;
-    margin:10px 0;
-    border-radius:8px;
-    border:none;
-    outline:none;
+    margin:5px 0;
 }
-
 button{
-    padding:12px;
-    width:100%;
+    padding:10px;
     background:gold;
     border:none;
-    border-radius:10px;
     font-weight:bold;
     cursor:pointer;
+    margin-top:10px;
 }
-
-.box{
-    max-width:600px;
-    margin:auto;
-}
-
-.logout{
-    position:fixed;
-    top:10px;
-    right:10px;
-    background:red;
-    color:#fff;
-    border:none;
+.card{
+    background:#1c1c1c;
+    border:1px solid gold;
     padding:10px;
-    border-radius:8px;
-    cursor:pointer;
+    margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 กันคนไม่ login เข้า -->
-<script>
-if(localStorage.getItem("adminLogin") !== "true"){
-    window.location.href = "login.html";
-}
-</script>
+<h2>Admin Panel</h2>
 
-<!-- 🔴 ปุ่มออกจากระบบ -->
-<button class="logout" onclick="logout()">ออกจากระบบ</button>
+<a href="amulet.html" style="color:gold;">⬅ กลับหน้าเว็บ</a>
 
-<div class="box">
-<h2>➕ เพิ่มข้อมูลพระ</h2>
+<hr>
+
+<h3>➕ เพิ่มพระ</h3>
 
 <input id="title" placeholder="ชื่อพระ">
+<input id="img" placeholder="ลิงก์รูปภาพ">
 
-<textarea id="desc" placeholder="รายละเอียด (ใส่ได้หลายบรรทัด)"></textarea>
+<select id="status">
+    <option value="available">พร้อมเช่า</option>
+    <option value="sold">ขายแล้ว</option>
+</select>
 
-<textarea id="imgs" placeholder="ลิงก์รูป (1 บรรทัด = 1 รูป)"></textarea>
+<button onclick="addAmulet()">เพิ่มพระ</button>
 
-<input id="fb" placeholder="ลิงก์ Facebook">
+<hr>
 
-<button onclick="save()">บันทึก</button>
-</div>
+<h3>รายการพระ</h3>
+<div id="list"></div>
 
 <script>
 
-// =======================
-// logout
-// =======================
-function logout(){
-    localStorage.removeItem("adminLogin");
+// กันคนไม่ login
+if(localStorage.getItem("admin") !== "true"){
     window.location.href = "login.html";
 }
 
-// =======================
-// save data
-// =======================
-function save(){
+// โหลดข้อมูล
+let data = JSON.parse(localStorage.getItem("amulet") || "{}");
 
-    let title = document.getElementById("title").value.trim();
-    let desc = document.getElementById("desc").value.trim();
-    let fb = document.getElementById("fb").value.trim();
+// แสดงรายการ
+function render(){
+    let list = document.getElementById("list");
+    list.innerHTML = "";
 
-    let imgs = document.getElementById("imgs").value
-        .split("\n")
-        .map(x => x.trim())
-        .filter(x => x !== "");
-
-    if(title === ""){
-        alert("กรุณาใส่ชื่อพระ");
-        return;
+    for(let id in data){
+        list.innerHTML += `
+        <div class="card">
+            <b>${data[id].title}</b><br><br>
+            <button onclick="deleteItem('${id}')">🗑️ ลบ</button>
+        </div>
+        `;
     }
+}
 
-    if(imgs.length === 0){
-        alert("กรุณาใส่รูปอย่างน้อย 1 รูป");
-        return;
-    }
+// เพิ่มพระ
+function addAmulet(){
 
     let id = "p" + Date.now();
 
-    let data = JSON.parse(localStorage.getItem("amulet") || "{}");
-
     data[id] = {
-        title,
-        desc,
-        imgs,
-        fb
+        title: document.getElementById("title").value,
+        img: document.getElementById("img").value,
+        status: document.getElementById("status").value
     };
 
     localStorage.setItem("amulet", JSON.stringify(data));
 
-    alert("บันทึกสำเร็จ!");
-
-   window.location.href = "amulet.html";
+    render();
 }
+
+// ลบพระ
+function deleteItem(id){
+
+    if(confirm("ต้องการลบพระองค์นี้ใช่ไหม?")){
+        delete data[id];
+        localStorage.setItem("amulet", JSON.stringify(data));
+        render();
+    }
+}
+
+render();
+
 </script>
 
 </body>

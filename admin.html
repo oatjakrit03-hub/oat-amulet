@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>เพิ่มพระ</title>
+<style>
+body{
+    font-family:Tahoma;
+    background:#111;
+    color:#fff;
+    padding:20px;
+}
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    border:none;
+}
+button{
+    padding:12px;
+    width:100%;
+    background:gold;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.box{
+    max-width:600px;
+    margin:auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>➕ เพิ่มข้อมูลพระ</h2>
+
+<input id="title" placeholder="ชื่อพระ">
+
+<textarea id="desc" placeholder="รายละเอียด (ใส่ได้หลายบรรทัด)"></textarea>
+
+<textarea id="imgs" placeholder="ลิงก์รูป (1 บรรทัด = 1 รูป)"></textarea>
+
+<input id="fb" placeholder="ลิงก์ Facebook">
+
+<button onclick="save()">บันทึก</button>
+</div>
+
+<script>
+function save(){
+
+    let title = document.getElementById("title").value;
+    let desc = document.getElementById("desc").value;
+    let fb = document.getElementById("fb").value;
+
+    let imgs = document.getElementById("imgs").value
+        .split("\n")
+        .filter(x => x.trim() !== "");
+
+    let id = "p" + Date.now();
+
+    let data = JSON.parse(localStorage.getItem("amulet") || "{}");
+
+    data[id] = {
+        title,
+        desc,
+        imgs,
+        fb
+    };
+
+    localStorage.setItem("amulet", JSON.stringify(data));
+
+    alert("บันทึกแล้ว!");
+
+    window.location.href = "amulet.html?id=" + id;
+}
+</script>
+
+</body>
+</html>

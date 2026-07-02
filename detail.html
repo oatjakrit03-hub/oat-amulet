@@ -103,53 +103,56 @@ body{
 </div>
 
 <script>
-const data = {
-p1:{
-title:"เหรียญพ่อครัว",
-imgs:[
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/1.jpg",
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/2.jpg"
-],
-desc:
-`เหรียญพ่อครัวรุ่นพิเศษ
+// โหลดข้อมูลจาก localStorage
+let data = JSON.parse(localStorage.getItem("amulet") || "{}");
+
+// ถ้ายังไม่มีข้อมูลใน localStorage ให้ใช้ข้อมูลตัวอย่างเดิม
+if (Object.keys(data).length === 0) {
+    data = {
+        p1:{
+            title:"เหรียญพ่อครัว",
+            imgs:[
+                "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/1.jpg",
+                "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/2.jpg"
+            ],
+            desc:`เหรียญพ่อครัวรุ่นพิเศษ
 เนื้อทองแดงผิวไฟ
 
 รายละเอียด:
 - สภาพสวย
 - เก็บรักษาดี
 - เหมาะแก่การสะสม`,
-fb:"https://www.facebook.com/jakrit.hanphanoen"
-},
+            fb:"https://www.facebook.com/jakrit.hanphanoen"
+        },
 
-p2:{
-title:"เหรียญแม่ทัพ",
-imgs:[
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg"
-],
-desc:
-`เหรียญแม่ทัพไร้ดาว
+        p2:{
+            title:"เหรียญแม่ทัพ",
+            imgs:[
+                "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
+                "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg"
+            ],
+            desc:`เหรียญแม่ทัพไร้ดาว
 
 - รุ่นหายาก
 - นิยมในสายสะสม
 - ผิวเดิมไม่ผ่านการล้าง`,
-fb:"https://www.facebook.com/jakrit.hanphanoen"
-},
+            fb:"https://www.facebook.com/jakrit.hanphanoen"
+        },
 
-p3:{
-title:"เหรียญโบสถ์ลั่น",
-imgs:[
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg"
-],
-desc:
-`เหรียญโบสถ์ลั่น
+        p3:{
+            title:"เหรียญโบสถ์ลั่น",
+            imgs:[
+                "https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg"
+            ],
+            desc:`เหรียญโบสถ์ลั่น
 
 รายละเอียดเพิ่มเติม:
 - รุ่นยอดนิยม
 - พิธีปลุกเสกเข้มขลัง`,
-fb:"https://www.facebook.com/jakrit.hanphanoen"
+            fb:"https://www.facebook.com/jakrit.hanphanoen"
+        }
+    };
 }
-};
 
 // ===== ดึง id จาก URL =====
 const params = new URLSearchParams(window.location.search);

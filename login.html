@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Admin Login</title>
+<style>
+body{
+    font-family:Tahoma;
+    background:#111;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    width:300px;
+    background:#1c1c1c;
+    padding:20px;
+    border-radius:10px;
+    border:1px solid gold;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:gold;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h3>🔐 Admin Login</h3>
+
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="login()">เข้าสู่ระบบ</button>
+</div>
+
+<script>
+
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "1234";
+
+function login(){
+
+    let u = document.getElementById("user").value;
+    let p = document.getElementById("pass").value;
+
+    if(u === ADMIN_USER && p === ADMIN_PASS){
+
+        localStorage.setItem("adminLogin", "true");
+
+        window.location.href = "admin.html";
+
+    }else{
+        alert("Username หรือ Password ไม่ถูกต้อง");
+    }
+}
+</script>
+
+</body>
+</html>

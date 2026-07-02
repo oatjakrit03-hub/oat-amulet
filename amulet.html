@@ -57,6 +57,18 @@ header{
 
 .available{color:#00ff7f}
 .sold{color:#ff4d4d}
+
+.add-btn{
+    display:block;
+    text-align:center;
+    margin:15px;
+    padding:12px;
+    background:gold;
+    color:#000;
+    font-weight:bold;
+    text-decoration:none;
+    border-radius:10px;
+}
 </style>
 </head>
 
@@ -66,32 +78,72 @@ header{
 <h2>ร้านพระเครื่อง โอ๊ต บางชัน AMULET</h2>
 </header>
 
-<div class="grid">
+<a class="add-btn" href="admin.html">➕ เพิ่มพระใหม่</a>
 
-<div class="card" onclick="goDetail('p1')">
-<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/1.jpg">
-<h3>เหรียญรุ่นพ่อครัว</h3>
-<div class="status available">พร้อมเช่า</div>
-</div>
-
-<div class="card" onclick="goDetail('p2')">
-<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/2.jpg">
-<h3>เหรียญแม่ทัพ</h3>
-<div class="status available">พร้อมเช่า</div>
-</div>
-
-<div class="card" onclick="goDetail('p3')">
-<img src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg">
-<h3>เหรียญโบสถ์ลั่น</h3>
-<div class="status sold">ขายแล้ว</div>
-</div>
-
-</div>
+<div class="grid" id="grid"></div>
 
 <script>
-function goDetail(id){
-    window.location.href = "detail.html?id=" + id;
+
+// ===============================
+// 1. ดึงข้อมูลจาก localStorage
+// ===============================
+let data = JSON.parse(localStorage.getItem("amulet") || "{}");
+
+// ===============================
+// 2. fallback ถ้ายังไม่มีข้อมูล
+// ===============================
+if(Object.keys(data).length === 0){
+    data = {
+        p1:{
+            title:"เหรียญรุ่นพ่อครัว",
+            img:"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/1.jpg",
+            status:"available"
+        },
+        p2:{
+            title:"เหรียญแม่ทัพ",
+            img:"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/2.jpg",
+            status:"available"
+        },
+        p3:{
+            title:"เหรียญโบสถ์ลั่น",
+            img:"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg",
+            status:"sold"
+        }
+    };
 }
+
+// ===============================
+// 3. render การ์ด
+// ===============================
+const grid = document.getElementById("grid");
+
+for(let id in data){
+
+    let item = data[id];
+
+    let img = item.imgs ? item.imgs[0] : item.img;
+    let title = item.title || "ไม่มีชื่อ";
+    let status = item.status || "available";
+
+    let statusText = status === "sold" ? "ขายแล้ว" : "พร้อมเช่า";
+    let statusClass = status === "sold" ? "sold" : "available";
+
+    let card = document.createElement("div");
+    card.className = "card";
+
+    card.onclick = () => {
+        window.location.href = "detail.html?id=" + id;
+    };
+
+    card.innerHTML = `
+        <img src="${img}">
+        <h3>${title}</h3>
+        <div class="status ${statusClass}">${statusText}</div>
+    `;
+
+    grid.appendChild(card);
+}
+
 </script>
 
 </body>

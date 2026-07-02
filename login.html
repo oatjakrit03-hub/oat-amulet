@@ -5,7 +5,8 @@
 <title>Admin Login</title>
 <style>
 body{
-    font-family:Tahoma;
+    margin:0;
+    font-family:tahoma;
     background:#111;
     color:#fff;
     display:flex;
@@ -13,23 +14,18 @@ body{
     align-items:center;
     height:100vh;
 }
-
 .box{
     width:300px;
     background:#1c1c1c;
+    border:1px solid gold;
     padding:20px;
     border-radius:10px;
-    border:1px solid gold;
 }
-
 input{
     width:100%;
     padding:10px;
-    margin:10px 0;
-    border:none;
-    border-radius:8px;
+    margin:8px 0;
 }
-
 button{
     width:100%;
     padding:10px;
@@ -44,32 +40,24 @@ button{
 <body>
 
 <div class="box">
-<h3>🔐 Admin Login</h3>
+<h3>เข้าสู่ระบบ Admin</h3>
 
 <input id="user" placeholder="Username">
 <input id="pass" type="password" placeholder="Password">
 
-<button onclick="login()">เข้าสู่ระบบ</button>
+<button onclick="login()">Login</button>
 </div>
 
 <script>
-
-const ADMIN_USER = "Admin";
-const ADMIN_PASS = "Admin168";
-
 function login(){
-
     let u = document.getElementById("user").value;
     let p = document.getElementById("pass").value;
 
-    if(u === ADMIN_USER && p === ADMIN_PASS){
-
-        localStorage.setItem("adminLogin", "true");
-
+    if(u === "admin" && p === "1234"){
+        localStorage.setItem("admin","true");
         window.location.href = "admin.html";
-
     }else{
-        alert("Username หรือ Password ไม่ถูกต้อง");
+        alert("รหัสไม่ถูกต้อง");
     }
 }
 </script>

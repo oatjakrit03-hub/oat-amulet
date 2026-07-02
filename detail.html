@@ -9,7 +9,7 @@
 body{
     margin:0;
     font-family:Tahoma;
-    background:#000;
+    background:#0f0f0f;
     color:#fff;
 }
 
@@ -19,51 +19,61 @@ body{
     padding:20px;
 }
 
-.slider{
-    position:relative;
-    overflow:hidden;
+.main-img{
+    width:100%;
     border-radius:15px;
-    background:#111;
+    cursor:zoom-in;
 }
 
-.slider img{
-    width:100%;
-    max-height:500px;
-    object-fit:contain;
-    cursor:zoom-in;
-    transition:transform .2s;
+.thumb{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.thumb img{
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    cursor:pointer;
+    border-radius:10px;
+    border:2px solid gold;
+}
+
+.box{
+    margin-top:20px;
+    padding:15px;
+    background:#1c1c1c;
+    border-radius:10px;
 }
 
 .btn{
-    margin-top:15px;
-    display:flex;
-    gap:10px;
-}
-
-button{
-    padding:10px 15px;
-    border:none;
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    padding:15px;
+    background:#1877f2;
+    color:#fff;
+    text-decoration:none;
     border-radius:10px;
-    background:#d4af37;
-    cursor:pointer;
     font-weight:bold;
 }
 
-.fb{
-    display:block;
-    margin-top:15px;
-    background:#0084ff;
-    color:#fff;
-    text-align:center;
-    padding:12px;
-    border-radius:10px;
-    text-decoration:none;
+/* zoom */
+.zoom{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.95);
+    display:none;
+    justify-content:center;
+    align-items:center;
 }
 
-/* zoom */
-.zoomed{
-    transform:scale(2);
-    cursor:grab;
+.zoom img{
+    max-width:90%;
+    max-height:90%;
 }
 </style>
 </head>
@@ -72,74 +82,80 @@ button{
 
 <div class="container">
 
-<h2 id="title"></h2>
+<h2 id="title">รายละเอียดพระ</h2>
 
-<div class="slider">
-    <img id="img">
+<img id="mainImg" class="main-img" onclick="openZoom()" src="">
+
+<div class="thumb" id="thumbs"></div>
+
+<div class="box">
+<p>รายละเอียดพระเครื่องจะแสดงตรงนี้</p>
 </div>
 
-<div class="btn">
-<button onclick="prev()">⬅ ก่อนหน้า</button>
-<button onclick="next()">ถัดไป ➡</button>
+<a class="btn" id="fbBtn" target="_blank">💬 สอบถาม Facebook</a>
+
 </div>
 
-<p id="desc"></p>
-
-<a class="fb" href="https://www.facebook.com/jakrit.hanphanoen/" target="_blank">
-💬 สอบถามราคาทาง Facebook
-</a>
-
+<div class="zoom" id="zoom" onclick="closeZoom()">
+<img id="zoomImg">
 </div>
 
 <script>
-// ข้อมูลพระ
 const data = {
 p1:{
-title:"เหรียญรุ่น 2 หลวงพ่อแดง",
-desc:"เหรียญสภาพสวย ผ่านการเก็บรักษาอย่างดี เหมาะสำหรับบูชา",
-images:[
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg"
-]
+title:"เหรียญพ่อครัว",
+imgs:[
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/1.jpg",
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/2.jpg"
+],
+fb:"https://www.facebook.com/jakrit.hanphanoen"
 },
-
 p2:{
-title:"แม่ทัพปี 2511",
-desc:"พระแท้สายตรง สภาพเดิม",
-images:[
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2.jpeg",
-"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7%20%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87.jpeg"
-]
+title:"เหรียญแม่ทัพ",
+imgs:[
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/2.jpg",
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg"
+],
+fb:"https://www.facebook.com/jakrit.hanphanoen"
+},
+p3:{
+title:"เหรียญโบสถ์ลั่น",
+imgs:[
+"https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/3.jpg"
+],
+fb:"https://www.facebook.com/jakrit.hanphanoen"
 }
 };
 
-const urlParams = new URLSearchParams(window.location.search);
-const id = urlParams.get("id");
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
-let index = 0;
-let current = data[id];
+const item = data[id];
 
-document.getElementById("title").innerText = current.title;
-document.getElementById("desc").innerText = current.desc;
+if(item){
+document.getElementById("title").innerText = item.title;
+document.getElementById("mainImg").src = item.imgs[0];
+document.getElementById("fbBtn").href = item.fb;
 
-const img = document.getElementById("img");
-img.src = current.images[0];
+let thumbs = document.getElementById("thumbs");
 
-// slide
-function next(){
-    index = (index + 1) % current.images.length;
-    img.src = current.images[index];
-}
-
-function prev(){
-    index = (index - 1 + current.images.length) % current.images.length;
-    img.src = current.images[index];
-}
-
-// zoom click
-img.addEventListener("click", ()=>{
-    img.classList.toggle("zoomed");
+item.imgs.forEach(img=>{
+let el = document.createElement("img");
+el.src = img;
+el.onclick = ()=>document.getElementById("mainImg").src = img;
+thumbs.appendChild(el);
 });
+}
+
+function openZoom(){
+document.getElementById("zoom").style.display="flex";
+document.getElementById("zoomImg").src =
+document.getElementById("mainImg").src;
+}
+
+function closeZoom(){
+document.getElementById("zoom").style.display="none";
+}
 </script>
 
 </body>

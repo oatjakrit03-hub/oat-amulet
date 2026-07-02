@@ -38,11 +38,20 @@ header{
 
 .card:hover{transform:scale(1.03)}
 
-.card img{
+.img-box{
     width:100%;
     height:320px;
-    object-fit:contain;
     background:#222;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.img-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
     display:block;
 }
 
@@ -138,10 +147,19 @@ for(let id in data){
     };
 
     card.innerHTML = `
-        <img src="${img}">
-        <h3>${title}</h3>
-        <div class="status ${statusClass}">${statusText}</div>
-    `;
+<div class="img-box">
+
+<img src="${img}"
+onerror="this.src='https://placehold.co/600x600?text=No+Image'">
+
+</div>
+
+<h3>${title}</h3>
+
+<div class="status ${statusClass}">
+${statusText}
+</div>
+`;
 
     grid.appendChild(card);
 }

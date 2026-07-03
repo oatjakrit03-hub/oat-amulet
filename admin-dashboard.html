@@ -24,47 +24,45 @@
     <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
     <h2>ระบบแอดมินจัดการหลังบ้าน (โอ๊ต บางชัน)</h2>
     
-    <!-- ส่วนของฟอร์มเพิ่มพระ -->
     <div class="form-box">
         <h3>➕ เพิ่มพระเครื่ององค์ใหม่</h3>
         <input type="text" id="name" placeholder="ชื่อพระเครื่อง (เช่น เหรียญรุ่นแรก...)">
         <input type="text" id="price" placeholder="ราคาเช่าบูชา (บาท) (หากไม่ใส่จะแสดงว่าติดต่อสอบถาม)">
-        <textarea id="description" rows="3" placeholder="รายละเอียด เช่น เนื้อทองแดง บล็อกนิยม สภาพสวยเดิม..."></textarea>
+        <textarea id="description" rows="4" placeholder="รายละเอียด เช่น เนื้อทองแดง บล็อกนิยม สภาพสวยเดิม..."></textarea>
         <select id="status">
             <option value="available">พร้อมเช่าบูชา</option>
             <option value="sold">มีผู้เช่าบูชาแล้ว</option>
         </select>
-        <label>รูปภาพพระเครื่อง (ใส่ลิงก์รูปภาพ เช่น ลิงก์จาก github หรือโฮสต์รูป แยกแต่ละรูปด้วยเครื่องหมายจุลภาค ,)</label>
-        <input type="text" id="images" placeholder="https://image1.jpg, https://image2.jpg">
+        <label style="font-size: 14px; color: #aaa;">รูปภาพพระเครื่อง (ใส่ลิงก์รูปภาพ เช่น จาก github หรือเว็บฝากรูปทั่วไป แยกแต่ละรูปภาพด้วยเครื่องหมายจุลภาค ,)</label>
+        <input type="text" id="images" placeholder="เช่น https://site.com/img1.jpg, https://site.com/img2.jpg">
         
         <button onclick="addAmulet()">บันทึกข้อมูลพระเครื่อง</button>
     </div>
 
-    <!-- รายการพระเครื่องที่มีอยู่ในระบบ -->
     <div class="amulet-list">
         <h3>📋 รายการพระเครื่องทั้งหมดในระบบ</h3>
         <div id="listContainer">กำลังโหลดข้อมูลรายการพระเครื่อง...</div>
     </div>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
+    // ตั้งค่า Firebase ของคุณโอ๊ตเรียบร้อยแล้ว
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
+        authDomain: "oat-amulet-shop.firebaseapp.com",
+        projectId: "oat-amulet-shop",
+        storageBucket: "oat-amulet-shop.firebasestorage.app",
+        messagingSenderId: "868077170885",
+        appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
+        measurementId: "G-GLR77H4VEH"
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // เช็คว่าล็อกอินอยู่จริงไหม ถ้าไม่จริงให้เด้งไปหน้า login
     auth.onAuthStateChanged(user => {
         if (!user) {
             window.location.href = "admin-login.html";
@@ -73,7 +71,6 @@
         }
     });
 
-    // ฟังก์ชันเพิ่มข้อมูลพระ
     function addAmulet() {
         const name = document.getElementById("name").value.trim();
         const price = document.getElementById("price").value.trim();
@@ -83,7 +80,6 @@
 
         if(!name) { alert("กรุณากรอกชื่อพระเครื่อง"); return; }
 
-        // แปลงข้อความลิงก์รูปภาพเป็น Array []
         const imagesArray = imagesInput ? imagesInput.split(",").map(url => url.trim()) : [];
 
         db.collection("amulets").add({
@@ -96,7 +92,6 @@
         })
         .then(() => {
             alert("เพิ่มข้อมูลพระเครื่องเรียบร้อยแล้ว!");
-            // เคลียร์ฟอร์ม
             document.getElementById("name").value = "";
             document.getElementById("price").value = "";
             document.getElementById("description").value = "";
@@ -106,7 +101,6 @@
         .catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
     }
 
-    // โหลดรายการพระทั้งหมดมาโชว์ในหน้า Dashboard
     function loadAmulets() {
         db.collection("amulets").orderBy("createdAt", "desc").get().then(querySnapshot => {
             const container = document.getElementById("listContainer");
@@ -133,7 +127,6 @@
         });
     }
 
-    // ฟังก์ชันลบพระเครื่อง
     function deleteAmulet(id) {
         if(confirm("คุณต้องการลบพระเครื่ององค์นี้ใช่หรือไม่? ข้อมูลจะหายถาวร")) {
             db.collection("amulets").doc(id).delete().then(() => {

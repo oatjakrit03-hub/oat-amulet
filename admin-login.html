@@ -9,7 +9,7 @@
     .login-box { background: #222; padding: 40px; border-radius: 15px; border: 1px solid #8b6b1f; text-align: center; width: 100%; max-width: 380px; box-shadow: 0 0 20px rgba(212,175,55,0.2); }
     h2 { color: #d4af37; margin-bottom: 25px; }
     input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #555; background: #333; color: #fff; font-size: 16px; box-sizing: border-box; }
-    button { width: 100%; padding: 12px; background: linear-gradient(180deg,#fff3b0,#d4af37,#9b7610); border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
+    button { width: 100%; padding: 12px; background: linear-gradient(180deg,#fff3b0,#d4af37,#9b7610); border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; color: #000;}
     button:hover { transform: scale(1.02); }
 </style>
 </head>
@@ -22,18 +22,18 @@
     <button onclick="login()">เข้าสู่ระบบ</button>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script>
-    // คอนฟิก Firebase (ต้องใช้ชุดเดียวกับอันบน)
+    // ตั้งค่า Firebase ของคุณโอ๊ตเรียบร้อยแล้ว
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
+        authDomain: "oat-amulet-shop.firebaseapp.com",
+        projectId: "oat-amulet-shop",
+        storageBucket: "oat-amulet-shop.firebasestorage.app",
+        messagingSenderId: "868077170885",
+        appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
+        measurementId: "G-GLR77H4VEH"
     };
     firebase.initializeApp(firebaseConfig);
 
@@ -44,7 +44,7 @@
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             alert("เข้าสู่ระบบสำเร็จ!");
-            window.location.href = "admin-dashboard.html"; // ไปหน้าจัดการข้อมูล
+            window.location.href = "admin-dashboard.html";
         })
         .catch((error) => {
             alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง: " + error.message);

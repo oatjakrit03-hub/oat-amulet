@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายละเอียดพระเครื่อง | โอ๊ต บางชัน AMULET</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: radial-gradient(circle at top,#2a2a2a,#000);
+        color: #fff;
+        font-family: Tahoma, sans-serif;
+    }
+    header {
+        background: linear-gradient(180deg, #000, #151515, #000);
+        text-align: center;
+        padding: 15px 20px;
+        border-bottom: 2px solid #caa74a;
+    }
+    h1 {
+        font-size: clamp(24px, 4vw, 36px);
+        background: linear-gradient(90deg, #fff7c0, #f4d36b, #b8860b, #fff0a5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 10px 0;
+    }
+    .container { max-width: 1000px; margin: auto; padding: 30px 20px; }
+    .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .image-gallery { text-align: center; }
+    .main-img { width: 100%; max-width: 450px; border-radius: 15px; border: 2px solid #d4af37; cursor: pointer; box-shadow: 0 0 20px rgba(212,175,55,0.3); }
+    .thumb-container { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+    .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #8b6b1f; cursor: pointer; }
+    .info-section { line-height: 1.8; font-size: 18px; }
+    .info-section h2 { color: #d4af37; margin-top: 0; }
+    .price { font-size: 24px; color: #f4d36b; font-weight: bold; margin: 15px 0; }
+    .status { display: inline-block; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 16px; margin-bottom: 20px; }
+    .available { background: #0f8c2d; }
+    .sold { background: #b30000; }
+    .btn-contact { display: inline-block; background: #0084ff; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; margin-top: 15px; text-align: center; }
+    .btn-back { display: inline-block; background: transparent; color: #d4af37; border: 1px solid #d4af37; text-decoration: none; padding: 10px 20px; border-radius: 10px; margin-top: 30px; }
+    
+    /* Lightbox โหมดซูม */
+    .lightbox { display: none; position: fixed; z-index: 9999; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); justify-content:center; align-items:center; }
+    .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 10px; }
+    .lightbox.show { display: flex; }
+
+    @media(max-width: 768px) {
+        .detail-layout { grid-template-columns: 1fr; }
+        .info-section { text-align: center; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>ร้านพระเครื่อง โอ๊ต บางชัน AMULET</h1>
+</header>
+
+<div class="container">
+    <div class="detail-layout">
+        <!-- ฝั่งรูปภาพ -->
+        <div class="image-gallery">
+            <img id="mainAmuletImg" class="main-img" src="" alt="รูปพระเครื่อง" onclick="zoomImg(this.src)">
+            <div id="thumbContainer" class="thumb-container"></div>
+        </div>
+        
+        <!-- ฝั่งข้อมูล -->
+        <div class="info-section">
+            <h2 id="amuletName">กำลังโหลดข้อมูล...</h2>
+            <div id="amuletStatus" class="status"></div>
+            <div id="amuletPrice" class="price"></div>
+            <p id="amuletDesc"></p>
+            
+            <a class="btn-contact" href="https://www.facebook.com/jakrit.hanphanoen/" target="_blank">💬 สอบถามผ่าน Facebook</a>
+            <br>
+            <a class="btn-back" href="amulet.html">← กลับหน้าพระเครื่องพร้อมเช่า</a>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox ซูมรูป -->
+<div id="customLightbox" class="lightbox" onclick="this.classList.remove('show')">
+    <img id="lightboxTarget" src="">
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+    // คอนฟิก Firebase (ให้เอาค่าจากเว็บ Firebase มาวางตรงนี้แทนช่องว่าง)
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ดึง ID พระจาก URL เช่น detail.html?id=xxxx
+    const urlParams = new URLSearchParams(window.location.search);
+    const amuletId = urlParams.get('id');
+
+    if (amuletId) {
+        db.collection("amulets").doc(amuletId).get().then((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById("amuletName").innerText = data.name;
+                document.getElementById("amuletPrice").innerText = data.price ? "ราคา: " + data.price + " บาท" : "ติดต่อสอบถามราคา";
+                document.getElementById("amuletDesc").innerText = data.description || "ไม่มีรายละเอียดเพิ่มเติม";
+                
+                // ตั้งค่าสถานะ
+                const statusEl = document.getElementById("amuletStatus");
+                if(data.status === "available") {
+                    statusEl.innerText = "🟢 พร้อมเช่าบูชา";
+                    statusEl.className = "status available";
+                } else {
+                    statusEl.innerText = "🔴 มีผู้เช่าบูชาแล้ว";
+                    statusEl.className = "status sold";
+                }
+
+                // โหลดรูปภาพ
+                if (data.images && data.images.length > 0) {
+                    document.getElementById("mainAmuletImg").src = data.images[0];
+                    
+                    // สร้างปุ่มรูปย่อกรณีมีหลายรูป
+                    const thumbDiv = document.getElementById("thumbContainer");
+                    data.images.forEach(imgUrl => {
+                        const img = document.createElement("img");
+                        img.src = imgUrl;
+                        img.className = "thumb-img";
+                        img.onclick = function() {
+                            document.getElementById("mainAmuletImg").src = imgUrl;
+                        };
+                        thumbDiv.appendChild(img);
+                    });
+                }
+            } else {
+                document.getElementById("amuletName").innerText = "ไม่พบข้อมูลพระเครื่ององค์นี้";
+            }
+        });
+    }
+
+    function zoomImg(src) {
+        if(!src) return;
+        document.getElementById("lightboxTarget").src = src;
+        document.getElementById("customLightbox").classList.add("show");
+    }
+</script>
+</body>
+</html>

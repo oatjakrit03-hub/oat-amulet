@@ -29,7 +29,7 @@
     .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
     .image-gallery { text-align: center; }
     .main-img { width: 100%; max-width: 450px; border-radius: 15px; border: 2px solid #d4af37; cursor: pointer; box-shadow: 0 0 20px rgba(212,175,55,0.3); }
-    .thumb-container { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+    .thumb-container { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
     .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #8b6b1f; cursor: pointer; }
     .info-section { line-height: 1.8; font-size: 18px; }
     .info-section h2 { color: #d4af37; margin-top: 0; }
@@ -59,18 +59,16 @@
 
 <div class="container">
     <div class="detail-layout">
-        <!-- ฝั่งรูปภาพ -->
         <div class="image-gallery">
-            <img id="mainAmuletImg" class="main-img" src="" alt="รูปพระเครื่อง" onclick="zoomImg(this.src)">
+            <img id="mainAmuletImg" class="main-img" src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/logo.png" alt="รูปพระเครื่อง" onclick="zoomImg(this.src)">
             <div id="thumbContainer" class="thumb-container"></div>
         </div>
         
-        <!-- ฝั่งข้อมูล -->
         <div class="info-section">
             <h2 id="amuletName">กำลังโหลดข้อมูล...</h2>
             <div id="amuletStatus" class="status"></div>
             <div id="amuletPrice" class="price"></div>
-            <p id="amuletDesc"></p>
+            <p id="amuletDesc" style="white-space: pre-line;"></p>
             
             <a class="btn-contact" href="https://www.facebook.com/jakrit.hanphanoen/" target="_blank">💬 สอบถามผ่าน Facebook</a>
             <br>
@@ -79,28 +77,26 @@
     </div>
 </div>
 
-<!-- Lightbox ซูมรูป -->
 <div id="customLightbox" class="lightbox" onclick="this.classList.remove('show')">
     <img id="lightboxTarget" src="">
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
-    // คอนฟิก Firebase (ให้เอาค่าจากเว็บ Firebase มาวางตรงนี้แทนช่องว่าง)
+    // ตั้งค่า Firebase ของคุณโอ๊ตเรียบร้อยแล้ว
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
+        authDomain: "oat-amulet-shop.firebaseapp.com",
+        projectId: "oat-amulet-shop",
+        storageBucket: "oat-amulet-shop.firebasestorage.app",
+        messagingSenderId: "868077170885",
+        appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
+        measurementId: "G-GLR77H4VEH"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ดึง ID พระจาก URL เช่น detail.html?id=xxxx
     const urlParams = new URLSearchParams(window.location.search);
     const amuletId = urlParams.get('id');
 
@@ -109,10 +105,9 @@
             if (doc.exists) {
                 const data = doc.data();
                 document.getElementById("amuletName").innerText = data.name;
-                document.getElementById("amuletPrice").innerText = data.price ? "ราคา: " + data.price + " บาท" : "ติดต่อสอบถามราคา";
+                document.getElementById("amuletPrice").innerText = data.price ? "ราคาบูชา: " + data.price + " บาท" : "ติดต่อสอบถามราคา";
                 document.getElementById("amuletDesc").innerText = data.description || "ไม่มีรายละเอียดเพิ่มเติม";
                 
-                // ตั้งค่าสถานะ
                 const statusEl = document.getElementById("amuletStatus");
                 if(data.status === "available") {
                     statusEl.innerText = "🟢 พร้อมเช่าบูชา";
@@ -122,11 +117,9 @@
                     statusEl.className = "status sold";
                 }
 
-                // โหลดรูปภาพ
                 if (data.images && data.images.length > 0) {
                     document.getElementById("mainAmuletImg").src = data.images[0];
                     
-                    // สร้างปุ่มรูปย่อกรณีมีหลายรูป
                     const thumbDiv = document.getElementById("thumbContainer");
                     data.images.forEach(imgUrl => {
                         const img = document.createElement("img");
@@ -141,6 +134,9 @@
             } else {
                 document.getElementById("amuletName").innerText = "ไม่พบข้อมูลพระเครื่ององค์นี้";
             }
+        }).catch(err => {
+            console.error(err);
+            document.getElementById("amuletName").innerText = "เกิดข้อผิดพลาดในการโหลดข้อมูล";
         });
     }
 

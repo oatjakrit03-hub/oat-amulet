@@ -67,7 +67,7 @@ h1{color:#d4af37;margin-top:15px;margin-bottom:10px;}
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:25px;
 }
 
@@ -79,6 +79,9 @@ h1{color:#d4af37;margin-top:15px;margin-bottom:10px;}
     text-align:center;
     cursor:pointer;
     transition:.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .card:hover{
@@ -86,22 +89,34 @@ h1{color:#d4af37;margin-top:15px;margin-bottom:10px;}
     box-shadow:0 0 20px rgba(212,175,55,.3);
 }
 
+/* 🛠️ ปรับแต่งส่วนรูปภาพให้สมดุลและเห็นเต็มรูป 100% ไม่โดนตัดขอบ */
 .card img{
     width:100%;
-    height: 250px;
-    object-fit: cover;
+    height: 300px; /* เพิ่มความสูงให้เห็นรายละเอียดชัดขึ้น */
+    object-fit: contain; /* โชว์รูปเต็มองค์ ไม่ครอป ไม่ตัดขอบ */
+    background: #0a0a0a; /* ใส่พื้นหลังสีเข้มเพื่อให้การ์ดดูเต็มสมดุล */
     border-radius:15px;
-    margin-bottom:20px;
+    margin-bottom:15px;
+    border: 1px solid #2a2a2a;
 }
 
-.card h3{color:#d4af37; margin: 10px 0; font-size: 18px;}
+.card h3{
+    color:#d4af37; 
+    margin: 10px 0; 
+    font-size: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 44px; /* ล็อกความสูงชื่อพระให้เท่ากันทุกกล่อง */
+}
 
 .status{
     display:inline-block;
     padding:8px 18px;
     border-radius:20px;
     font-weight:bold;
-    margin-top:10px;
+    margin-top:auto; /* ดันปุ่มสถานะให้อยู่ล่างสุดเสมอ */
 }
 
 .available{background:#0f8c2d;}
@@ -156,11 +171,11 @@ Line ID : jakrit39<br><br>
 <a href="admin-login.html" style="color: #8b6b1f; text-decoration: none; font-size: 13px;">🔒 สำหรับผู้ดูแลระบบ</a>
 </footer>
 
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
-    // เชื่อมต่อระบบ Firebase ของคุณโอ๊ตเรียบร้อยแล้วครับ
     const firebaseConfig = {
         apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
         authDomain: "oat-amulet-shop.firebaseapp.com",
@@ -171,11 +186,9 @@ Line ID : jakrit39<br><br>
         measurementId: "G-GLR77H4VEH"
     };
 
-    // เริ่มต้นใช้งาน Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ดึงข้อมูลรายการพระเครื่องทั้งหมดจาก Firestore เรียงตามเพิ่งเพิ่มล่าสุด
     db.collection("amulets").orderBy("createdAt", "desc").get().then((querySnapshot) => {
         const grid = document.getElementById("amuletGridContainer");
         grid.innerHTML = ""; 
@@ -187,8 +200,6 @@ Line ID : jakrit39<br><br>
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            
-            // ดึงภาพแรกมาแสดง ถ้าไม่มีภาพให้ใช้โลโก้แทน
             const mainImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/logo.png';
             
             let statusText = data.status === "available" ? "🟢 พร้อมเช่าบูชา" : "🔴 มีผู้เช่าบูชาแล้ว";
@@ -197,7 +208,6 @@ Line ID : jakrit39<br><br>
             const card = document.createElement("div");
             card.className = "card";
             
-            // คลิกการ์ดแล้วส่ง ID ไปแสดงข้อมูลเชิงลึกที่หน้า detail.html
             card.onclick = function() {
                 window.location.href = `detail.html?id=${doc.id}`;
             };

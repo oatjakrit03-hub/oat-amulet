@@ -115,7 +115,6 @@ footer{
     color:#ccc;
 }
 
-/* ข้อความขณะโหลดข้อมูล */
 .loading-text {
     text-align: center;
     font-size: 20px;
@@ -149,7 +148,6 @@ footer{
 <div class="grid" id="amuletGridContainer">
     <div class="loading-text">กำลังโหลดข้อมูลพระเครื่องจากระบบหลังบ้าน...</div>
 </div>
-
 </div>
 
 <footer>
@@ -161,69 +159,59 @@ Line ID : jakrit39
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
-    // ⚠️ สำคัญมาก: นำชุดคอนฟิก Firebase ของคุณที่ได้จาก Firebase Console มาวางทับตรงนี้
+    // เชื่อมต่อระบบ Firebase ของคุณโอ๊ตเรียบร้อยแล้วครับ
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
+        authDomain: "oat-amulet-shop.firebaseapp.com",
+        projectId: "oat-amulet-shop",
+        storageBucket: "oat-amulet-shop.firebasestorage.app",
+        messagingSenderId: "868077170885",
+        appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
+        measurementId: "G-GLR77H4VEH"
     };
-    
-    // เริ่มต้นระบบ Firebase
+
+    // เริ่มต้นใช้งาน Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ดึงข้อมูลรายการพระเครื่องทั้งหมดเรียงจากอันใหม่ล่าสุด
+    // ดึงข้อมูลรายการพระเครื่องทั้งหมดจาก Firestore เรียงตามเพิ่งเพิ่มล่าสุด
     db.collection("amulets").orderBy("createdAt", "desc").get().then((querySnapshot) => {
         const grid = document.getElementById("amuletGridContainer");
-        grid.innerHTML = ""; // ล้างข้อความกำลังโหลดออก
+        grid.innerHTML = ""; 
 
         if (querySnapshot.empty) {
-            grid.innerHTML = '<div class="loading-text">ขณะนี้ยังไม่มีพระเครื่องในระบบจัดเก็บข้อมูล</div>';
+            grid.innerHTML = '<div class="loading-text">ขณะนี้ยังไม่มีรายการพระเครื่องในระบบหลังบ้าน</div>';
             return;
         }
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             
-            // เช็คว่ามีรูปภาพไหม ถ้าไม่มีให้ใช้รูปพื้นหลังว่างหรือรูปโลโก้แทน
+            // ดึงภาพแรกมาแสดง ถ้าไม่มีภาพให้ใช้โลโก้แทน
             const mainImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/logo.png';
             
-            // จัดการแท็กสถานะ
-            let statusText = "";
-            let statusClass = "";
-            if (data.status === "available") {
-                statusText = "🟢 พร้อมเช่าบูชา";
-                statusClass = "available";
-            } else {
-                statusText = "🔴 มีผู้เช่าบูชาแล้ว";
-                statusClass = "sold";
-            }
+            let statusText = data.status === "available" ? "🟢 พร้อมเช่าบูชา" : "🔴 มีผู้เช่าบูชาแล้ว";
+            let statusClass = data.status === "available" ? "available" : "sold";
 
-            // สร้าง Element สำหรับการ์ดพระ
             const card = document.createElement("div");
             card.className = "card";
             
-            // เมื่อคลิกที่การ์ด ให้เด้งไปหน้า detail.html พร้อมส่ง ID ประจำตัวพระไปด้วย
+            // คลิกการ์ดแล้วส่ง ID ไปแสดงข้อมูลเชิงลึกที่หน้า detail.html
             card.onclick = function() {
                 window.location.href = `detail.html?id=${doc.id}`;
             };
 
-            // ใส่เนื้อหาข้างในการ์ด
             card.innerHTML = `
                 <img src="${mainImg}" alt="${data.name}">
                 <h3>${data.name}</h3>
                 <div class="status ${statusClass}">${statusText}</div>
             `;
 
-            // นำการ์ดไปใส่ใน Grid บนหน้าเว็บ
             grid.appendChild(card);
         });
     }).catch((error) => {
-        console.error("Error getting documents: ", error);
-        document.getElementById("amuletGridContainer").innerHTML = '<div class="loading-text" style="color:#ff8080;">เกิดข้อผิดพลาดในการดึงข้อมูลจากระบบหลังบ้าน</div>';
+        console.error("Error fetching amulets: ", error);
+        document.getElementById("amuletGridContainer").innerHTML = '<div class="loading-text" style="color:#ff8080;">เกิดข้อผิดพลาดในการดึงข้อมูลจากฐานข้อมูล</div>';
     });
 </script>
 

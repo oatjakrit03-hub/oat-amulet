@@ -8,14 +8,17 @@
     body { background: #1a1a1a; color: #fff; font-family: sans-serif; padding: 20px; }
     .container { max-width: 900px; margin: auto; }
     h2 { color: #d4af37; border-bottom: 1px solid #8b6b1f; padding-bottom: 10px; }
-    .form-box { background: #262626; padding: 25px; border-radius: 12px; border: 1px solid #8b6b1f; margin-bottom: 30px; }
+    .form-box { background: #262626; padding: 25px; border-radius: 12px; border: 1px solid #8b6b1f; margin-bottom: 30px; position: relative; }
     input, textarea, select { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 6px; background: #333; color: #fff; border: 1px solid #555; box-sizing: border-box;}
     button { background: #d4af37; color: #000; font-weight: bold; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; }
     .logout-btn { background: #b30000; color: #fff; float: right; padding: 8px 15px; }
+    .cancel-btn { background: #555; color: #fff; margin-left: 10px; display: none; }
     
     .amulet-list { background: #262626; padding: 20px; border-radius: 12px; }
     .amulet-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #444; }
-    .delete-btn { background: #b30000; color: #fff; padding: 5px 12px; border-radius: 4px; font-size: 14px; }
+    .action-btns { display: flex; gap: 8px; }
+    .edit-btn { background: #0084ff; color: #fff; padding: 5px 12px; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; }
+    .delete-btn { background: #b30000; color: #fff; padding: 5px 12px; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -25,7 +28,7 @@
     <h2>ระบบแอดมินจัดการหลังบ้าน (โอ๊ต บางชัน)</h2>
     
     <div class="form-box">
-        <h3>➕ เพิ่มพระเครื่ององค์ใหม่</h3>
+        <h3 id="formTitle">➕ เพิ่มพระเครื่ององค์ใหม่</h3>
         <input type="text" id="name" placeholder="ชื่อพระเครื่อง (เช่น เหรียญรุ่นแรก...)">
         <input type="text" id="price" placeholder="ราคาเช่าบูชา (บาท) (หากไม่ใส่จะแสดงว่าติดต่อสอบถาม)">
         <textarea id="description" rows="4" placeholder="รายละเอียด เช่น เนื้อทองแดง บล็อกนิยม สภาพสวยเดิม..."></textarea>
@@ -33,10 +36,11 @@
             <option value="available">พร้อมเช่าบูชา</option>
             <option value="sold">มีผู้เช่าบูชาแล้ว</option>
         </select>
-        <label style="font-size: 14px; color: #aaa;">รูปภาพพระเครื่อง (ใส่ลิงก์รูปภาพ เช่น จาก github หรือเว็บฝากรูปทั่วไป แยกแต่ละรูปภาพด้วยเครื่องหมายจุลภาค ,)</label>
+        <label style="font-size: 14px; color: #aaa;">รูปภาพพระเครื่อง (แยกแต่ละรูปภาพด้วยเครื่องหมายจุลภาค ,)</label>
         <input type="text" id="images" placeholder="เช่น https://site.com/img1.jpg, https://site.com/img2.jpg">
         
-        <button onclick="addAmulet()">บันทึกข้อมูลพระเครื่อง</button>
+        <button id="submitBtn" onclick="submitForm()">บันทึกข้อมูลพระเครื่อง</button>
+        <button id="cancelBtn" class="cancel-btn" onclick="resetForm()">ยกเลิกการแก้ไข</button>
     </div>
 
     <div class="amulet-list">
@@ -49,7 +53,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
-    // ตั้งค่า Firebase ของคุณโอ๊ตเรียบร้อยแล้ว
+    // ตั้งค่า Firebase ของคุณโอ๊ต
     const firebaseConfig = {
         apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
         authDomain: "oat-amulet-shop.firebaseapp.com",
@@ -63,6 +67,9 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // ตัวแปรเก็บ ID พระเครื่องที่กำลังแก้ไข (ถ้าเป็น null แปลว่ากำลังเพิ่มใหม่)
+    let currentEditId = null;
+
     auth.onAuthStateChanged(user => {
         if (!user) {
             window.location.href = "admin-login.html";
@@ -71,7 +78,8 @@
         }
     });
 
-    function addAmulet() {
+    // ฟังก์ชันตัดสินใจว่าจะ เพิ่มใหม่ หรือ อัปเดตข้อมูลเดิม
+    function submitForm() {
         const name = document.getElementById("name").value.trim();
         const price = document.getElementById("price").value.trim();
         const description = document.getElementById("description").value.trim();
@@ -82,23 +90,73 @@
 
         const imagesArray = imagesInput ? imagesInput.split(",").map(url => url.trim()) : [];
 
-        db.collection("amulets").add({
+        const amuletData = {
             name: name,
             price: price,
             description: description,
             status: status,
-            images: imagesArray,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            alert("เพิ่มข้อมูลพระเครื่องเรียบร้อยแล้ว!");
-            document.getElementById("name").value = "";
-            document.getElementById("price").value = "";
-            document.getElementById("description").value = "";
-            document.getElementById("images").value = "";
-            loadAmulets();
-        })
-        .catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
+            images: imagesArray
+        };
+
+        if (currentEditId === null) {
+            // โหมดเพิ่มข้อมูลใหม่
+            amuletData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            db.collection("amulets").add(amuletData)
+            .then(() => {
+                alert("เพิ่มข้อมูลพระเครื่องเรียบร้อยแล้ว!");
+                resetForm();
+                loadAmulets();
+            })
+            .catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
+        } else {
+            // โหมดแก้ไขข้อมูลเดิม
+            db.collection("amulets").doc(currentEditId).update(amuletData)
+            .then(() => {
+                alert("แก้ไขข้อมูลพระเครื่องเรียบร้อยแล้ว!");
+                resetForm();
+                loadAmulets();
+            })
+            .catch(err => alert("เกิดข้อผิดพลาดในการอัปเดต: " + err.message));
+        }
+    }
+
+    // ฟังก์ชันดึงข้อมูลเดิมมาใส่ในฟอร์มเพื่อเตรียมแก้ไข
+    function startEdit(id) {
+        db.collection("amulets").doc(id).get().then(doc => {
+            if (doc.exists) {
+                const data = doc.data();
+                currentEditId = id; // บันทึก ID ที่กำลังแก้ไข
+
+                // เอาข้อมูลเดิมไปใส่ในช่องกรอก
+                document.getElementById("name").value = data.name || "";
+                document.getElementById("price").value = data.price || "";
+                document.getElementById("description").value = data.description || "";
+                document.getElementById("status").value = data.status || "available";
+                document.getElementById("images").value = data.images ? data.images.join(", ") : "";
+
+                // เปลี่ยนข้อความบนหน้าฟอร์ม
+                document.getElementById("formTitle").innerText = "✏️ แก้ไขข้อมูลพระเครื่อง";
+                document.getElementById("submitBtn").innerText = "อัปเดตข้อมูลพระเครื่อง";
+                document.getElementById("cancelBtn").style.display = "inline-block";
+
+                // เลื่อนหน้าจอขึ้นไปที่ฟอร์มด้านบน
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
+    // ฟังก์ชันล้างฟอร์มกลับเป็นโหมดเพิ่มพระเครื่องปกติ
+    function resetForm() {
+        currentEditId = null;
+        document.getElementById("name").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("images").value = "";
+        document.getElementById("status").value = "available";
+
+        document.getElementById("formTitle").innerText = "➕ เพิ่มพระเครื่ององค์ใหม่";
+        document.getElementById("submitBtn").innerText = "บันทึกข้อมูลพระเครื่อง";
+        document.getElementById("cancelBtn").style.display = "none";
     }
 
     function loadAmulets() {
@@ -120,7 +178,10 @@
                         <strong>${data.name}</strong> - ${data.price || 'ติดต่อสอบถาม'} บาท 
                         (${data.status === 'available' ? 'พร้อมเช่า' : 'ขายแล้ว'})
                     </div>
-                    <button class="delete-btn" onclick="deleteAmulet('${doc.id}')">ลบ</button>
+                    <div class="action-btns">
+                        <button class="edit-btn" onclick="startEdit('${doc.id}')">แก้ไข</button>
+                        <button class="delete-btn" onclick="deleteAmulet('${doc.id}')">ลบ</button>
+                    </div>
                 `;
                 container.appendChild(item);
             });
@@ -131,6 +192,7 @@
         if(confirm("คุณต้องการลบพระเครื่ององค์นี้ใช่หรือไม่? ข้อมูลจะหายถาวร")) {
             db.collection("amulets").doc(id).delete().then(() => {
                 alert("ลบข้อมูลสำเร็จ!");
+                if(currentEditId === id) resetForm();
                 loadAmulets();
             });
         }

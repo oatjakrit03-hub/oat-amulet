@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบตรวจสอบใบรับรองพระเครื่อง - OAT AMULET</title>
+    <title>ระบบตรวจสอบใบรับประกันพระเครื่อง - OAT AMULET</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: #ffffff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .container { max-width: 800px; width: 100%; background: #1e1e1e; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid #333; text-align: center; box-sizing: border-box; }
@@ -68,7 +68,6 @@
         resultDiv.innerHTML = '<p style="text-align:center;">กำลังค้นหา...</p>';
 
         try {
-            // แก้ไข: กรองหาข้อมูลที่ certNo ตรงกัน และต้องเป็นประเภท certificate เท่านั้น
             const querySnapshot = await db.collection("amulets")
                 .where("certNo", "==", certInput)
                 .where("dataType", "==", "certificate")
@@ -76,7 +75,7 @@
 
             if (!querySnapshot.empty) {
                 const data = querySnapshot.docs[0].data();
-                currentSlides = data.images || []; // ใช้ชื่อฟิลด์ images ตามที่คุณตั้งไว้ในระบบ
+                currentSlides = data.images || [];
                 currentSlideIndex = 0;
 
                 let imageSectionHtml = currentSlides.length > 0 ? `
@@ -100,6 +99,7 @@
                         <p><b>เนื้อพระ :</b> ${data.nuea || '-'}</p>
                         <p><b>วันที่ออกบัตร :</b> ${data.certDate || '-'}</p>
                         <p><b>ชื่อเจ้าของพระ :</b> ${data.owner || '-'}</p>
+                        <p><b>ราคาเช่าบูชา :</b> ${data.price || '-'} บาท</p>
                     </div>
                     ${imageSectionHtml}
                 </div>`;

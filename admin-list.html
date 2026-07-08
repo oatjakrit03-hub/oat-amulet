@@ -5,41 +5,62 @@
     <title>รายการข้อมูลทั้งหมด | Admin</title>
     <style>
         body { background: #1a1a1a; color: #fff; font-family: sans-serif; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; background: #262626; padding: 20px; border-radius: 12px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #555; padding: 10px; text-align: left; }
-        button { cursor: pointer; padding: 5px 10px; border-radius: 5px; border: none; }
+        .container { max-width: 900px; margin: auto; background: #262626; padding: 20px; border-radius: 12px; border: 1px solid #8b6b1f; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #ccc; }
+        th, td { border: 1px solid #444; padding: 12px; text-align: left; }
+        th { background: #333; color: #d4af37; }
+        .btn { padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; text-decoration: none; display: inline-block; font-size: 14px; margin-right: 5px; }
         .edit-btn { background: #d4af37; color: #000; }
         .del-btn { background: #b30000; color: #fff; }
+        .add-btn { background: #0f8c2d; color: #fff; padding: 10px 20px; display: inline-block; margin-bottom: 20px; text-decoration: none; border-radius: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>รายการข้อมูลในระบบ</h2>
-        <a href="admin-edit.html" style="color: #d4af37;">+ เพิ่มข้อมูลใหม่</a>
+        <h2>จัดการข้อมูลพระเครื่อง</h2>
+        <a href="admin-edit.html" class="add-btn">+ เพิ่มข้อมูลใหม่</a>
         <table>
-            <thead><tr><th>ชื่อพระ/รายการ</th><th>ประเภท</th><th>จัดการ</th></tr></thead>
-            <tbody id="listBody"></tbody>
+            <thead>
+                <tr>
+                    <th>ชื่อรายการ</th>
+                    <th>ประเภท</th>
+                    <th>จัดการ</th>
+                </tr>
+            </thead>
+            <tbody id="listBody">
+                <tr><td colspan="3" style="text-align:center;">กำลังโหลดข้อมูล...</td></tr>
+            </tbody>
         </table>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script>
-        const firebaseConfig = { /* ใส่ค่า Config ของคุณตรงนี้ */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
+            authDomain: "oat-amulet-shop.firebaseapp.com",
+            projectId: "oat-amulet-shop",
+            storageBucket: "oat-amulet-shop.firebasestorage.app",
+            messagingSenderId: "868077170885",
+            appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
+            measurementId: "G-GLR77H4VEH"
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        db.collection("amulets").get().then((snapshot) => {
+        // ดึงข้อมูลทั้งหมดมาแสดง
+        db.collection("amulets").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
             const body = document.getElementById("listBody");
+            body.innerHTML = "";
             snapshot.forEach((doc) => {
                 const data = doc.data();
+                const displayName = data.name || data.certNo || "ไม่มีชื่อ";
                 const row = `<tr>
-                    <td>${data.name || data.certNo || "ไม่มีชื่อ"}</td>
-                    <td>${data.dataType || "-"}</td>
+                    <td>${displayName}</td>
+                    <td>${data.dataType === 'forSale' ? 'พระพร้อมเช่า' : 'ใบรับประกัน'}</td>
                     <td>
-                        <button class="edit-btn" onclick="window.location.href='admin-edit.html?id=${doc.id}'">แก้ไข</button>
-                        <button class="del-btn" onclick="deleteData('${doc.id}')">ลบ</button>
+                        <a href="admin-edit.html?id=${doc.id}" class="btn edit-btn">แก้ไข</a>
+                        <button class="btn del-btn" onclick="deleteData('${doc.id}')">ลบ</button>
                     </td>
                 </tr>`;
                 body.innerHTML += row;
@@ -47,8 +68,10 @@
         });
 
         function deleteData(id) {
-            if(confirm("ยืนยันการลบข้อมูลนี้?")) {
-                db.collection("amulets").doc(id).delete().then(() => { alert("ลบเรียบร้อย"); location.reload(); });
+            if(confirm("คุณต้องการลบข้อมูลนี้ใช่หรือไม่?")) {
+                db.collection("amulets").doc(id).delete().then(() => {
+                    alert("ลบข้อมูลสำเร็จ");
+                });
             }
         }
     </script>

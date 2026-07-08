@@ -2,17 +2,48 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>จัดการข้อมูลหลังบ้าน | โอ๊ต บางชัน</title>
-    <!-- ... (สไตล์เดิมของคุณ) ... -->
+    <style>
+        body { background: #1a1a1a; color: #fff; font-family: sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: #262626; padding: 25px; border-radius: 12px; border: 1px solid #8b6b1f; }
+        input, textarea, select { width: 100%; padding: 10px; margin-bottom: 10px; background: #333; color: #fff; border: 1px solid #555; border-radius: 5px; box-sizing: border-box; }
+        button { background: #d4af37; color: #000; padding: 12px; border: none; width: 100%; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        .section-header { color: #d4af37; border-bottom: 1px solid #555; margin: 20px 0 10px 0; padding-bottom: 5px; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <!-- ... (HTML เดิมของคุณ) ... -->
+
+    <div class="container">
+        <h2>➕ เพิ่มข้อมูลใหม่</h2>
+        <label>ประเภท:</label>
+        <select id="dataType">
+            <option value="forSale">พระเครื่องพร้อมเช่าบูชา</option>
+            <option value="certificate">ข้อมูลตรวจสอบใบรับประกัน</option>
+        </select>
+        
+        <div class="section-header">ข้อมูลทั่วไป</div>
+        <input type="text" id="name" placeholder="ชื่อพระ / ชื่อรายการ">
+        <textarea id="description" placeholder="รายละเอียด"></textarea>
+        
+        <div class="section-header">ข้อมูลระบบตรวจสอบ</div>
+        <input type="text" id="certNo" placeholder="เลขรับประกัน (เช่น OBC-0000)">
+        <input type="text" id="geji" placeholder="ชื่อหลวงพ่อ / เกจิ">
+        <input type="text" id="wat" placeholder="วัด">
+        
+        <div class="section-header">รูปภาพ (ใส่ลิงก์ URL)</div>
+        <input type="text" id="img1" placeholder="รูปที่ 1">
+        <input type="text" id="img2" placeholder="รูปที่ 2">
+        <input type="text" id="img3" placeholder="รูปที่ 3">
+        <input type="text" id="img4" placeholder="รูปที่ 4">
+        
+        <button onclick="saveData()">บันทึกข้อมูล</button>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script>
-        // เติมค่า Config ของคุณตรงนี้ให้ครบ
         const firebaseConfig = {
             apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
             authDomain: "oat-amulet-shop.firebaseapp.com",
@@ -24,14 +55,6 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
-        // ตรวจสอบสถานะการเข้าสู่ระบบ
-        firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                alert("กรุณาเข้าสู่ระบบก่อนใช้งาน");
-                window.location.href = "admin-login.html";
-            }
-        });
 
         function saveData() {
             const imagesArray = [
@@ -49,7 +72,7 @@
                 geji: document.getElementById("geji").value,
                 wat: document.getElementById("wat").value,
                 images: imagesArray,
-                certImages: imagesArray, // แก้ไขให้ใช้รูปชุดเดียวกันกับข้อมูลทั่วไป
+                certImages: imagesArray,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 

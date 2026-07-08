@@ -71,8 +71,9 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // แก้ไข: ดึงข้อมูลทั้งหมดใน collection "amulets" มาแสดงโดยไม่กรองด้วย dataType
+    // แก้ไขใหม่: ใช้ .where เพื่อกรองดึงเฉพาะข้อมูลประเภท "forSale" (พระเครื่องพร้อมเช่า) เท่านั้น
     db.collection("amulets")
+      .where("dataType", "==", "forSale")
       .orderBy("createdAt", "desc")
       .get()
       .then((querySnapshot) => {
@@ -95,14 +96,14 @@
             card.className = "card";
             card.onclick = () => window.location.href = `detail.html?id=${doc.id}`;
             card.innerHTML = `
-                <img src="${mainImg}" alt="${data.name}">
-                <h3>${data.name}</h3>
+                <img src="${mainImg}" alt="${data.name || 'ไม่มีชื่อพระ'}">
+                <h3>${data.name || 'ไม่มีชื่อพระ'}</h3>
                 <div class="status ${statusClass}">${statusText}</div>
             `;
             grid.appendChild(card);
         });
     }).catch((err) => {
-        console.error(err);
+        console.error("Firebase Error:", err);
         document.getElementById("amuletGridContainer").innerHTML = '<div class="loading-text">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
     });
 </script>

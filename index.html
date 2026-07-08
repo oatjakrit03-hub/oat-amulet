@@ -20,7 +20,10 @@ let currentSlides = [];
 let currentSlideIndex = 0;
 
 async function searchCert() {
-    const certInput = document.getElementById('certNo').value.trim().toUpperCase();
+    const certInputBox = document.getElementById('certNo');
+    if (!certInputBox) return;
+    
+    const certInput = certInputBox.value.trim().toUpperCase();
     const resultDiv = document.getElementById('result');
 
     if (!certInput) {
@@ -96,10 +99,15 @@ window.changeSlide = function(direction) {
     document.getElementById('certSlideImg').src = currentSlides[currentSlideIndex];
 }
 
-// รองรับการกดปุ่ม Enter ในการค้นหา
-document.getElementById('certNo').addEventListener('keypress', function(e){
-    if (e.key === 'Enter') { searchCert(); }
-});
+// แก้ไขบั๊กหน้าขาว: ทำการโหลดหน้าเว็บ (DOM) ให้เสร็จก่อนเปิดการทำงานของปุ่ม Enter
+window.onload = function() {
+    const certInputBox = document.getElementById('certNo');
+    if (certInputBox) {
+        certInputBox.addEventListener('keypress', function(e){
+            if (e.key === 'Enter') { searchCert(); }
+        });
+    }
+};
 
 function openLightbox(src){
     document.getElementById("lightbox-img").src = src;

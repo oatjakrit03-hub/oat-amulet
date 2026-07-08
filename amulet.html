@@ -71,9 +71,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ดึงเฉพาะข้อมูลที่ dataType เป็น forSale
+    // แก้ไข: ดึงข้อมูลทั้งหมดใน collection "amulets" มาแสดงโดยไม่กรองด้วย dataType
     db.collection("amulets")
-      .where("dataType", "==", "forSale")
       .orderBy("createdAt", "desc")
       .get()
       .then((querySnapshot) => {
@@ -87,7 +86,6 @@
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            // ถ้าไม่มี status ให้ถือว่าเป็น available[cite: 1]
             const status = data.status || "available"; 
             const mainImg = (data.images && data.images.length > 0) ? data.images[0] : 'https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/logo.png';
             let statusText = status === "available" ? "🟢 พร้อมเช่าบูชา" : "🔴 มีผู้เช่าบูชาแล้ว";
@@ -103,7 +101,8 @@
             `;
             grid.appendChild(card);
         });
-    }).catch(() => {
+    }).catch((err) => {
+        console.error(err);
         document.getElementById("amuletGridContainer").innerHTML = '<div class="loading-text">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
     });
 </script>

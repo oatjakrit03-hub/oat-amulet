@@ -37,6 +37,7 @@
             <input type="text" id="nuea" placeholder="เนื้อพระ">
             <input type="text" id="certDate" placeholder="วันที่ออกบัตร">
             <input type="text" id="owner" placeholder="ชื่อเจ้าของพระ">
+            <input type="text" id="certPrice" placeholder="ราคาเช่าบูชา"> <!-- เพิ่มช่องกรอกราคาใบรับประกัน -->
         </div>
 
         <div class="section-header">รูปภาพ (ใส่ URL)</div>
@@ -87,6 +88,7 @@
                     document.getElementById("nuea").value = data.nuea || "";
                     document.getElementById("certDate").value = data.certDate || "";
                     document.getElementById("owner").value = data.owner || "";
+                    document.getElementById("certPrice").value = data.price || ""; // ดึงราคาใบรับประกัน
                 }
                 if(data.images) {
                     data.images.forEach((img, i) => { if(document.getElementById("img"+(i+1))) document.getElementById("img"+(i+1)).value = img; });
@@ -119,6 +121,7 @@
                 data.nuea = document.getElementById("nuea").value;
                 data.certDate = document.getElementById("certDate").value;
                 data.owner = document.getElementById("owner").value;
+                data.price = document.getElementById("certPrice").value; // บันทึกราคาใบรับประกัน
             }
 
             if (docId) {

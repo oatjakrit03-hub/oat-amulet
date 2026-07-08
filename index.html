@@ -1,768 +1,107 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>โอ๊ต บางชัน AMULET</title>
-
-<style>
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    background:
-        radial-gradient(circle at top,#2a2a2a,#000);
-    color:#fff;
-    font-family:Tahoma,sans-serif;
-}
-
-header{
-    background:
-        linear-gradient(
-            180deg,
-            #000,
-            #151515,
-            #000
-        );
-    text-align:center;
-    padding:15px 20px;
-    border-bottom:2px solid #caa74a;
-}
-
-h1{
-    font-size:clamp(28px,5vw,42px);
-    margin-top:0;
-margin-bottom:10px;
-    background:linear-gradient(
-        90deg,
-        #fff7c0,
-        #f4d36b,
-        #b8860b,
-        #fff0a5
-    );
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    text-shadow:
-        0 0 15px rgba(255,215,0,.35);
-}
-
-.subtitle{
-    color:#e5e5e5;
-    font-size:clamp(16px,3vw,24px);
-    line-height:1.7;
-    max-width:1000px;
-    margin:0 auto 30px auto;
-    text-shadow:0 0 10px rgba(255,215,0,0.15);
-}
-
-.search-box{
-    background:
-        linear-gradient(
-            180deg,
-            #1d1d1d,
-            #101010
-        );
-    border:1px solid #8b6b1f;
-    border-radius:20px;
-    padding:25px;
-    box-shadow:
-        0 0 25px rgba(212,175,55,.15);
-}
-
-button{
-    background:
-        linear-gradient(
-            180deg,
-            #fff3b0,
-            #d4af37,
-            #9b7610
-        );
-    color:#000;
-    border:none;
-    padding:14px 30px;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:
-        0 0 15px rgba(212,175,55,.5);
-}
-
-button:hover{
-    transform:scale(1.05);
-}
-
-#result{
-    margin-top:25px;
-    background:
-        linear-gradient(
-            180deg,
-            #222,
-            #111
-        );
-    border-radius:20px;
-    padding:25px;
-    border:1px solid #8b6b1f;
-}
-
-.card{
-    background:
-        linear-gradient(
-            180deg,
-            #1b1b1b,
-            #111
-        );
-    border:1px solid #8b6b1f;
-    border-radius:20px;
-    padding:30px;
-    text-align:center;
-    box-shadow:
-        0 0 15px rgba(212,175,55,.1);
-}
-
-@media(max-width:900px){
-    .result-layout{
-        grid-template-columns:1fr;
-    }
-
-    .result-info{
-        text-align:center;
-    }
-}
-    .container{
-    max-width:1200px;
-    margin:auto;
-    padding:40px 20px;
-}
-
-input{
-    width:100%;
-    max-width:500px;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:#fff;
-    margin-bottom:15px;
-    font-size:16px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    margin-top:25px;
-}
-
-.result-layout{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:40px;
-    align-items:center;
-}
-
-.result-info{
-    text-align:left;
-    line-height:2;
-    font-size:18px;
-}
-
-.result-info p{
-    margin:8px 0;
-}
-
-.result-image{
-    text-align:center;
-}
-
-.result-image img{
-    width:100%;
-    max-width:700px;
-    border-radius:20px;
-    border:3px solid #d4af37;
-    box-shadow:0 0 35px rgba(212,175,55,.5);
-}
-
-@media(max-width:900px){
-    .result-layout{
-        grid-template-columns:1fr;
-    }
-
-    .result-info{
-        text-align:center;
-    }
-
-    .result-image img{
-        max-width:100%;
-    }
-}
-.logo{
-    width:min(70vw,350px);
-    height:min(70vw,350px);
-    object-fit:cover;
-    border-radius:50%;
-    display:block;
-    margin:0 auto -20px auto;
-    border:none;
-    box-shadow:none;
-}
-    h1{
-    margin-top:0;
-margin-bottom:5px;
-line-height:1;
-}
-footer{
-    margin-top:60px;
-    border-top:1px solid #8b6b1f;
-    text-align:center;
-    padding:30px;
-    color:#ccc;
-}
-
-a{
-    color:#f7d66b;
-}
-
-a{
-    color:#d4af37;
-    text-decoration:none;
-}
-    .lightbox {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.9);
-    justify-content: center;
-    align-items: center;
-}
-
-.lightbox img {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 15px;
-}
-
-.lightbox.show {
-    display: flex;
-}
-    
-    @media (max-width:768px){
-
-    .logo{
-        width:220px;
-        height:220px;
-        margin:0 auto -15px auto;
-    }
-
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-    .card img{
-        width:100%;
-        aspect-ratio:1/1;
-        object-fit:cover;
-        display:block;
-    }
-
-    header{
-        padding:20px 15px;
-    }
-
-    h1{
-        font-size:28px;
-    }
-
-    .subtitle{
-        font-size:16px;
-    }
-
-    .container{
-        padding:20px 15px;
-    }
-
-    .search-box{
-        padding:20px;
-    }
-
-    .card{
-        padding:20px;
-    }
-
-    button{
-        width:100%;
-        padding:15px;
-    }
-
-    .result-info{
-        font-size:16px;
-        line-height:1.8;
-    }
-
-    footer{
-        padding:20px 10px;
-        font-size:14px;
-    }
-
-    .menu{
-        justify-content:center;
-        padding:10px;
-    }
-
-    .menu a{
-        font-size:16px;
-        padding:10px 18px;
-    }
-}
-        .menu{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:15px;
-    background:#111;
-    padding:12px 20px;
-    border-top:1px solid #8b6b1f;
-    border-bottom:1px solid #8b6b1f;
-}
-
-.menu a{
-    background:linear-gradient(
-        180deg,
-        #fff3b0,
-        #d4af37,
-        #9b7610
-    );
-    color:#000;
-    text-decoration:none;
-    padding:10px 22px;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:bold;
-    display:inline-block;
-    transition:0.3s;
-}
-
-.menu a:hover{
-    transform:translateY(-2px);
-    box-shadow:0 0 15px rgba(212,175,55,.5);
-}
-@media (max-width:768px){
-
-    .menu{
-        justify-content:center;
-        gap:10px;
-        padding:10px;
-        flex-wrap:wrap;
-    }
-
-    .menu a{
-        font-size:14px;
-        padding:8px 16px;
-    }
-
-}
-</style>
-</head>
-
-<body>
-
-<header>
-    <img
-        src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/main/images/logo.png"
-        class="logo"
-        alt="โลโก้ร้าน"
-    >
-    <h1>ร้านพระเครื่อง โอ๊ต บางชัน AMULET</h1>
-
-    <p class="subtitle">
-        พระแท้ พระสวย คัดคุณภาพสำหรับนักสะสม พระเครื่อง ที่เราจัดหาให้คุณเปี่ยมทั้งคุณภาพและ การันตีพระแท้ ตามหลักสากล
-    </p>
- 
-</header>
-<nav class="menu">
-    <a href="index.html">หน้าแรก</a>
-
-    <a href="amulet.html">
-        พระเครื่องพร้อมเช่าบูชา
-    </a>
-
-    <a href="about.html">
-        เกี่ยวกับร้านและการรับประกัน
-    </a>
-</nav>
-<div class="container">
-
-    <div class="search-box">
-        <h2 style="color:#d4af37;">ค้นหาเลขบัตรรับประกันพระแท้</h2>
-
-        <input
-            type="text"
-            id="certNo"
-            placeholder="เช่น OBC-xxxx"
-        >
-
-        <br>
-
-        <button onclick="searchCert()">
-            ค้นหา
-        </button>
-
-        <div id="result">
-            กรอกเลขรับประกันเพื่อค้นหาข้อมูล
-        </div>
-    </div>
-
-    <h2 style="color:#d4af37;">
-        พระเครื่องแนะนำจากทางร้านที่ น่าเก็บ น่าสะสม
-    </h2>
-
-    <div class="grid">
-
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9E%E0%B9%88%E0%B8%AD%E0%B9%81%E0%B8%94%E0%B8%87%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B9%81%E0%B8%A3%E0%B8%81.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-หลวงพ่อแดง วัดเขาบันไดอิฐ รุ่นแรก
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%80%E0%B8%88%E0%B8%A3%E0%B8%B4%E0%B8%8D%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%99%E0%B8%99%E0%B8%A7%E0%B8%B0.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-เจริญพรบน หลวงปู่ทิม วัดระหารไร่ เนื้อนวะ
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%80%E0%B8%88%E0%B8%A3%E0%B8%B4%E0%B8%8D%E0%B8%9E%E0%B8%A3%E0%B8%9A%E0%B8%99%E0%B8%9C%E0%B8%B4%E0%B8%A7%E0%B9%84%E0%B8%9F.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-เจริญพรบน หลวงปู่ทิม วัดระหารไร่ โค้ดพิเศษ
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B8%97%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B8%B3.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-แม่ทัพ เนื้อทองคำ หลวงพ่อแดง วัดเขาบันไดอิฐ
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B9%84%E0%B8%A3%E0%B9%89%E0%B8%94%E0%B8%B2%E0%B8%A7.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-แม่ทัพ เนื้อทองแดง บล็อกไร้ดาว หลวงพ่อแดง วัดเขาบันไดอิฐ
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%80%E0%B8%AA%E0%B8%A1%E0%B8%B28%E0%B8%A3%E0%B8%AD%E0%B8%9A%E0%B8%99%E0%B8%A7%E0%B8%B0.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-เสมา8รอบ เนื้อนวะ หลวงปู่ทิม อิสริโก วัดระหารไร่
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B9%80%E0%B8%AA%E0%B8%A1%E0%B8%B28%E0%B8%A3%E0%B8%AD%E0%B8%9A%E0%B8%97%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%94%E0%B8%87.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-เสมา8รอบ เนื้อ ทองแดง หลวงปู่ทิม วัดระหารไร่
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%82%E0%B8%B8%E0%B8%99%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%9E%E0%B9%88%E0%B8%AD%E0%B8%AA%E0%B8%B2%E0%B8%84%E0%B8%A3%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B9%81%E0%B8%A3%E0%B8%81.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-ขุนแผน พรายกุมาร หลวงพ่อสาคร รุ่นแรก
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B8%95%E0%B8%B2%E0%B8%88%E0%B8%B1%E0%B8%A1%E0%B9%82%E0%B8%9A%E0%B9%892.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-ปิดตาจัมโบ้ หลวงปู่โต๊ะ วัดประดู่ฉิมพลี
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">
-
-<img
-src="https://raw.githubusercontent.com/oatjakrit03-hub/oat-amulet/refs/heads/main/images/%E0%B8%82%E0%B8%B8%E0%B8%99%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%9B%E0%B8%B9%E0%B9%88%E0%B8%97%E0%B8%B4%E0%B8%A1.jpg"
-style="
-width:100%;
-border-radius:25px;
-margin-bottom:25px;
-"
->
-
-<h3 style="color:#d4af37;">
-ขุนแผน ผงพรายกุมาร หลวงปู่ทิมอิสริโก
-</h3>
-
-<p>
-
-</p>
-
-</div>
-        <div class="card">รออัปโหลดพระองค์ที่ 11</div>
-
-    </div>
-
-</div>
-
-<footer>
-    <p>Facebook : ร้านพระเครื่อง โอ๊ต บางชัน AMULET</p>
-    <p>Line ID : jakrit39</p>
-    <p>โทรศัพท์ : 098-104-7956</p>
-</footer>
-
+<!-- แทนที่แท็กสคริปต์เดิมในหน้า index.html ด้วยโค้ดชุดนี้ครับ -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
-const csvUrl =
-'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9003I_DGkUhx1z3ajec368wXSWvy2_ECpxSBT8cgNi4cPWyuR4QmJwidYZ7oiv2k-V8JUP0ue9Un6/pub?gid=0&single=true&output=csv';
+// ตั้งค่าคอนฟิก Firebase ให้ตรงกับฐานข้อมูลหลังบ้าน
+const firebaseConfig = {
+    apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
+    authDomain: "oat-amulet-shop.firebaseapp.com",
+    projectId: "oat-amulet-shop",
+    storageBucket: "oat-amulet-shop.firebasestorage.app",
+    messagingSenderId: "868077170885",
+    appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
+    measurementId: "G-GLR77H4VEH"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let currentSlides = [];
+let currentSlideIndex = 0;
 
 async function searchCert() {
+    const certInput = document.getElementById('certNo').value.trim().toUpperCase();
+    const resultDiv = document.getElementById('result');
 
-    const cert = document
-        .getElementById('certNo')
-        .value
-        .trim()
-        .toUpperCase();
-
-    const result =
-        document.getElementById('result');
-
-    if (!cert) {
-        result.innerHTML =
-            'กรุณากรอกเลขรับประกัน';
+    if (!certInput) {
+        resultDiv.innerHTML = 'กรุณากรอกเลขรับประกัน';
         return;
     }
 
+    resultDiv.innerHTML = 'กำลังค้นหาข้อมูลในระบบฐานข้อมูล...';
+
     try {
+        // เปลี่ยนระบบยิงไปหาที่คอลเลกชัน amulets ใน Firebase แทนไฟล์ Google Sheets
+        const querySnapshot = await db.collection("amulets").where("certNo", "==", certInput).get();
 
-        const response = await fetch(csvUrl);
-        const text = await response.text();
+        if (!querySnapshot.empty) {
+            // ดึงข้อมูลแถวแรกที่เจอเลขรับประกันตรงกัน
+            const doc = querySnapshot.docs[0];
+            const data = doc.data();
+            
+            // เตรียมสไลด์รูปภาพใบรับรอง (ดึงมาจากฟิลด์ certImages ที่เก็บลิงก์ ImgBB ไว้)
+            currentSlides = data.certImages || [];
+            currentSlideIndex = 0;
 
-        // รองรับทั้ง Tab และ Comma
-        const rows = text
-            .trim()
-            .split('\n')
-            .map(row => {
-                if (row.includes('\t')) {
-                    return row.split('\t');
-                }
-                return row.split(',');
-            });
+            let imageSectionHtml = '';
+            if (currentSlides.length > 0) {
+                imageSectionHtml = `
+                    <div class="result-image">
+                        <div class="slider" style="position:relative; display:inline-block;">
+                            <img id="certSlideImg" class="slide active" src="${currentSlides[0]}" onclick="openLightbox(this.src)" style="width:100%; max-width:700px; border-radius:20px; border:3px solid #d4af37; box-shadow:0 0 35px rgba(212,175,55,.5); cursor:pointer;">
+                            ${currentSlides.length > 1 ? `
+                                <button class="prev" onclick="changeSlide(-1)" style="position:absolute; top:50%; left:10px; background:rgba(0,0,0,0.5); color:#fff; border:none; padding:10px; cursor:pointer;">❮</button>
+                                <button class="next" onclick="changeSlide(1)" style="position:absolute; top:50%; right:10px; background:rgba(0,0,0,0.5); color:#fff; border:none; padding:10px; cursor:pointer;">❯</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }
 
-        const data = rows.slice(1);
-
-        const found = data.find(row =>
-            row.length > 0 &&
-            row[0].trim().toUpperCase() === cert
-        );
-
-        if (found) {
-
-  let html = `
-<h3 style="
-    color:#d4af37;
-    text-align:center;
-    margin-bottom:35px;
-    font-size:28px;
-">
-✓ พระเครื่ององค์นี้รับประกันแท้จากทางร้าน
-</h3>
-
-<div class="result-layout">
-
-    <div class="result-info">
-
-        <p><b>เลขรับประกัน :</b> ${found[0] || '-'}</p>
-        <p><b>เกจิ :</b> ${found[1] || '-'}</p>
-        <p><b>วัด :</b> ${found[2] || '-'}</p>
-        <p><b>พิมพ์ :</b> ${found[3] || '-'}</p>
-        <p><b>เนื้อ :</b> ${found[4] || '-'}</p>
-        <p><b>วันที่ออกบัตร :</b> ${found[5] || '-'}</p>
-        <p><b>ชื่อเจ้าของ :</b> ${found[6] || '-'}</p>
-        <p><b>ราคา :</b> ${found[7] || '-'} บาท</p>
-
-    </div>
-
-<div class="result-image">
-
-    <div class="slider">
-
-        ${
-            found[8] && found[8].trim() !== ''
-            ? `<img class="slide active" src="${found[8]}" onclick="openLightbox(this.src)">`
-            : ''
-        }
-
-        ${
-            found[9] && found[9].trim() !== ''
-            ? `<img class="slide" src="${found[9]}" onclick="openLightbox(this.src)">`
-            : ''
-        }
-
-        <button class="prev" onclick="changeSlide(-1)">❮</button>
-        <button class="next" onclick="changeSlide(1)">❯</button>
-
-    </div>
-
-</div>
-
-</div>
-`;
-
-result.innerHTML = html;
-
-        } else {
-
-            result.innerHTML = `
-                <span style="color:#ff8080;">
-                    ไม่พบข้อมูลเลขรับประกันนี้
-                </span>
+            let html = `
+            <h3 style="color:#d4af37; text-align:center; margin-bottom:35px; font-size:28px;">
+            ✓ พระเครื่ององค์นี้รับประกันแท้จากทางร้าน
+            </h3>
+            <div class="result-layout">
+                <div class="result-info">
+                    <p><b>เลขรับประกัน :</b> ${data.certNo || '-'}</p>
+                    <p><b>เกจิ :</b> ${data.geji || '-'}</p>
+                    <p><b>วัด :</b> ${data.wat || '-'}</p>
+                    <p><b>พิมพ์ :</b> ${data.pim || '-'}</p>
+                    <p><b>เนื้อ :</b> ${data.nuea || '-'}</p>
+                    <p><b>วันที่ออกบัตร :</b> ${data.certDate || '-'}</p>
+                    <p><b>ชื่อเจ้าของ :</b> ${data.owner || '-'}</p>
+                    <p><b>ราคาเช่าบูชา :</b> ${data.price || '-'} บาท</p>
+                    <p style="margin-top:15px;"><a href="detail.html?id=${doc.id}" style="color:#d4af37; text-decoration:underline; font-weight:bold;">🔍 ดูรายละเอียดหน้าพระเครื่องพร้อมเช่า</a></p>
+                </div>
+                ${imageSectionHtml}
+            </div>
             `;
+            resultDiv.innerHTML = html;
+        } else {
+            resultDiv.innerHTML = `<span style="color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้ในระบบ</span>`;
         }
-
     } catch (error) {
-
         console.error(error);
-
-        result.innerHTML = `
-            <span style="color:#ff8080;">
-                เกิดข้อผิดพลาดในการโหลดข้อมูล
-            </span>
-        `;
+        resultDiv.innerHTML = `<span style="color:#ff8080;">เกิดข้อผิดพลาดในการโหลดข้อมูลจากระบบหลังบ้าน</span>`;
     }
 }
 
-// กด Enter เพื่อค้นหาได้
-document.getElementById('certNo')
-.addEventListener('keypress', function(e){
-    if (e.key === 'Enter') {
-        searchCert();
-    }
+// ฟังก์ชันควบคุมสไลด์รูปภาพใบรับรอง
+window.changeSlide = function(direction) {
+    if (currentSlides.length <= 1) return;
+    currentSlideIndex += direction;
+    if (currentSlideIndex >= currentSlides.length) currentSlideIndex = 0;
+    if (currentSlideIndex < 0) currentSlideIndex = currentSlides.length - 1;
+    document.getElementById('certSlideImg').src = currentSlides[currentSlideIndex];
+}
+
+// รองรับการกดปุ่ม Enter ในการค้นหา
+document.getElementById('certNo').addEventListener('keypress', function(e){
+    if (e.key === 'Enter') { searchCert(); }
 });
-    function openLightbox(src){
+
+function openLightbox(src){
     document.getElementById("lightbox-img").src = src;
     document.getElementById("lightbox").classList.add("show");
 }
@@ -771,10 +110,3 @@ function closeLightbox(){
     document.getElementById("lightbox").classList.remove("show");
 }
 </script>
-
-<div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img">
-    
-</div>
-</body>
-</html>

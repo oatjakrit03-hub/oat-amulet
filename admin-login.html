@@ -11,6 +11,9 @@
     input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #555; background: #333; color: #fff; font-size: 16px; box-sizing: border-box; }
     button { width: 100%; padding: 12px; background: linear-gradient(180deg,#fff3b0,#d4af37,#9b7610); border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; color: #000;}
     button:hover { transform: scale(1.02); }
+    /* สไตล์ปุ่มกลับหน้าแรก */
+    .back-btn { margin-top: 20px; display: inline-block; color: #d4af37; text-decoration: none; font-size: 14px; }
+    .back-btn:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -20,6 +23,9 @@
     <input type="email" id="email" placeholder="อีเมลแอดมิน">
     <input type="password" id="password" placeholder="รหัสผ่าน">
     <button onclick="login()">เข้าสู่ระบบ</button>
+    
+    <!-- เพิ่มปุ่มกลับหน้าแรกตรงนี้ -->
+    <a href="index.html" class="back-btn">⬅️ กลับไปหน้าแรก</a>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>

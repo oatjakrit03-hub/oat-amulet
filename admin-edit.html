@@ -75,7 +75,6 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
-    // ** ใส่ API KEY ของ ImgBB ตรงนี้เพื่อใช้ในการอัปโหลดรูปฟรี **
     const IMGBB_API_KEY = "7a5bd83f1fb6343d447b52fed843d826";
 
     const firebaseConfig = {
@@ -95,7 +94,6 @@
 
     auth.onAuthStateChanged(user => {
         if (!user) { 
-            // หากไม่มีสิทธิ์การเข้าสู่ระบบ ให้เช็คว่าหน้านี้เป็นหน้าจอสำเร็จรูปหลังกด Logout หรือไม่ หากไม่ใช่ให้เด้งกลับไปหน้าล็อกอิน
             if (!document.getElementById("logoutSuccessBox")) {
                 window.location.href = "admin-login.html"; 
             }
@@ -104,7 +102,6 @@
         }
     });
 
-    // ฟังก์ชันอัปโหลดไฟล์เดี่ยวไป ImgBB
     async function uploadToImgBB(file) {
         const formData = new FormData();
         formData.append('image', file);
@@ -128,7 +125,6 @@
         const status = document.getElementById("status").value;
         const imagesInput = document.getElementById("images").value.trim();
         
-        // ข้อมูลบัตรรับประกัน
         const certNo = document.getElementById("certNo").value.trim().toUpperCase();
         const geji = document.getElementById("geji").value.trim();
         const wat = document.getElementById("wat").value.trim();
@@ -144,7 +140,6 @@
         submitBtn.innerText = "กำลังอัปโหลดรูปภาพและบันทึกข้อมูล...";
 
         try {
-            // 1. จัดการรูปภาพพระเครื่อง (เช็คทั้งไฟล์อัปโหลด และ ลิงก์ข้อความ)
             let finalImages = imagesInput ? imagesInput.split(",").map(url => url.trim()) : [];
             const amuletFiles = document.getElementById("imageFiles").files;
             if (amuletFiles.length > 0) {
@@ -154,7 +149,6 @@
                 }
             }
 
-            // 2. จัดการรูปภาพใบรับรอง
             let finalCertImages = certImagesInput ? certImagesInput.split(",").map(url => url.trim()) : [];
             const certFile = document.getElementById("certImageFile").files[0];
             if (certFile) {
@@ -162,14 +156,12 @@
                 finalCertImages.push(uploadedCertUrl);
             }
 
-            // จัดโครงสร้างชุดข้อมูลเพื่อเซฟลง Firestore
             const amuletData = {
                 name: name,
                 price: price,
                 description: description,
                 status: status,
                 images: finalImages,
-                // ส่วนของระบบบัตรรับประกัน
                 certNo: certNo || "",
                 geji: geji || "",
                 wat: wat || "",
@@ -211,7 +203,6 @@
                 document.getElementById("status").value = data.status || "available";
                 document.getElementById("images").value = data.images ? data.images.join(", ") : "";
                 
-                // โหลดข้อมูลบัตรมาแสดงในฟอร์มแก้ไข
                 document.getElementById("certNo").value = data.certNo || "";
                 document.getElementById("geji").value = data.geji || "";
                 document.getElementById("wat").value = data.wat || "";
@@ -294,16 +285,14 @@
 
     function logout() { 
         auth.signOut().then(() => {
-            // บังคับเปลี่ยนการแสดงผลในหน้าจอ ล้างข้อมูลการจัดการเดิมทั้งหมดทิ้ง
             const mainContainer = document.querySelector('.container');
             mainContainer.innerHTML = `
                 <div id="logoutSuccessBox" style="max-width: 500px; margin: 100px auto; padding: 40px 20px; background: #262626; border: 1px solid #8b6b1f; border-radius: 12px; text-align: center; color: #fff;">
                     <h2 style="color: #d4af37; margin-bottom: 20px; border-bottom: none; padding-bottom: 0;">🔒 ออกจากระบบเรียบร้อยแล้ว</h2>
                     <p style="color: #aaa; margin-bottom: 30px; font-size: 15px;">คุณได้ออกจากระบบจัดการหลังบ้านเรียบร้อยแล้วครับ</p>
                     
-                    <!-- ปุ่มสำหรับกดย้อนกลับไปหน้าหลักของเว็บไซต์ -->
-                    <a href="index.html" style="display: inline-block; background: #d4af37; color: #000; font-weight: bold; text-decoration: none; padding: 12px 30px; border-radius: 6px; transition: 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.2);">
-                        🏠 กลับไปหน้าแรกของเว็บไซต์
+                    <a href="amulet.html" style="display: inline-block; background: #d4af37; color: #000; font-weight: bold; text-decoration: none; padding: 12px 30px; border-radius: 6px; transition: 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.2);">
+                        🏠 กลับไปหน้าพระเครื่องพร้อมเช่า
                     </a>
                 </div>
             `;

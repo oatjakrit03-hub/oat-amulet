@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>รายการข้อมูลทั้งหมด | Admin</title>
+    <style>
+        body { background: #1a1a1a; color: #fff; font-family: sans-serif; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; background: #262626; padding: 20px; border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #555; padding: 10px; text-align: left; }
+        button { cursor: pointer; padding: 5px 10px; border-radius: 5px; border: none; }
+        .edit-btn { background: #d4af37; color: #000; }
+        .del-btn { background: #b30000; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>รายการข้อมูลในระบบ</h2>
+        <a href="admin-edit.html" style="color: #d4af37;">+ เพิ่มข้อมูลใหม่</a>
+        <table>
+            <thead><tr><th>ชื่อพระ/รายการ</th><th>ประเภท</th><th>จัดการ</th></tr></thead>
+            <tbody id="listBody"></tbody>
+        </table>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = { /* ใส่ค่า Config ของคุณตรงนี้ */ };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        db.collection("amulets").get().then((snapshot) => {
+            const body = document.getElementById("listBody");
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const row = `<tr>
+                    <td>${data.name || data.certNo || "ไม่มีชื่อ"}</td>
+                    <td>${data.dataType || "-"}</td>
+                    <td>
+                        <button class="edit-btn" onclick="window.location.href='admin-edit.html?id=${doc.id}'">แก้ไข</button>
+                        <button class="del-btn" onclick="deleteData('${doc.id}')">ลบ</button>
+                    </td>
+                </tr>`;
+                body.innerHTML += row;
+            });
+        });
+
+        function deleteData(id) {
+            if(confirm("ยืนยันการลบข้อมูลนี้?")) {
+                db.collection("amulets").doc(id).delete().then(() => { alert("ลบเรียบร้อย"); location.reload(); });
+            }
+        }
+    </script>
+</body>
+</html>

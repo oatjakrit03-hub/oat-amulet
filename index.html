@@ -1,120 +1,221 @@
-<!-- แทนที่แท็กสคริปต์เดิมในหน้า index.html ด้วยโค้ดชุดนี้ครับ -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
-// ตั้งค่าคอนฟิก Firebase ให้ตรงกับฐานข้อมูลหลังบ้าน
-const firebaseConfig = {
-    apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
-    authDomain: "oat-amulet-shop.firebaseapp.com",
-    projectId: "oat-amulet-shop",
-    storageBucket: "oat-amulet-shop.firebasestorage.app",
-    messagingSenderId: "868077170885",
-    appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
-    measurementId: "G-GLR77H4VEH"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-let currentSlides = [];
-let currentSlideIndex = 0;
-
-async function searchCert() {
-    const certInputBox = document.getElementById('certNo');
-    if (!certInputBox) return;
-    
-    const certInput = certInputBox.value.trim().toUpperCase();
-    const resultDiv = document.getElementById('result');
-
-    if (!certInput) {
-        resultDiv.innerHTML = 'กรุณากรอกเลขรับประกัน';
-        return;
-    }
-
-    resultDiv.innerHTML = 'กำลังค้นหาข้อมูลในระบบฐานข้อมูล...';
-
-    try {
-        // เปลี่ยนระบบยิงไปหาที่คอลเลกชัน amulets ใน Firebase แทนไฟล์ Google Sheets
-        const querySnapshot = await db.collection("amulets").where("certNo", "==", certInput).get();
-
-        if (!querySnapshot.empty) {
-            // ดึงข้อมูลแถวแรกที่เจอเลขรับประกันตรงกัน
-            const doc = querySnapshot.docs[0];
-            const data = doc.data();
-            
-            // เตรียมสไลด์รูปภาพใบรับรอง (ดึงมาจากฟิลด์ certImages ที่เก็บลิงก์ ImgBB ไว้)
-            currentSlides = data.certImages || [];
-            currentSlideIndex = 0;
-
-            let imageSectionHtml = '';
-            if (currentSlides.length > 0) {
-                imageSectionHtml = `
-                    <div class="result-image">
-                        <div class="slider" style="position:relative; display:inline-block;">
-                            <img id="certSlideImg" class="slide active" src="${currentSlides[0]}" onclick="openLightbox(this.src)" style="width:100%; max-width:700px; border-radius:20px; border:3px solid #d4af37; box-shadow:0 0 35px rgba(212,175,55,.5); cursor:pointer;">
-                            ${currentSlides.length > 1 ? `
-                                <button class="prev" onclick="changeSlide(-1)" style="position:absolute; top:50%; left:10px; background:rgba(0,0,0,0.5); color:#fff; border:none; padding:10px; cursor:pointer;">❮</button>
-                                <button class="next" onclick="changeSlide(1)" style="position:absolute; top:50%; right:10px; background:rgba(0,0,0,0.5); color:#fff; border:none; padding:10px; cursor:pointer;">❯</button>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }
-
-            let html = `
-            <h3 style="color:#d4af37; text-align:center; margin-bottom:35px; font-size:28px;">
-            ✓ พระเครื่ององค์นี้รับประกันแท้จากทางร้าน
-            </h3>
-            <div class="result-layout">
-                <div class="result-info">
-                    <p><b>เลขรับประกัน :</b> ${data.certNo || '-'}</p>
-                    <p><b>เกจิ :</b> ${data.geji || '-'}</p>
-                    <p><b>วัด :</b> ${data.wat || '-'}</p>
-                    <p><b>พิมพ์ :</b> ${data.pim || '-'}</p>
-                    <p><b>เนื้อ :</b> ${data.nuea || '-'}</p>
-                    <p><b>วันที่ออกบัตร :</b> ${data.certDate || '-'}</p>
-                    <p><b>ชื่อเจ้าของ :</b> ${data.owner || '-'}</p>
-                    <p><b>ราคาเช่าบูชา :</b> ${data.price || '-'} บาท</p>
-                    <p style="margin-top:15px;"><a href="detail.html?id=${doc.id}" style="color:#d4af37; text-decoration:underline; font-weight:bold;">🔍 ดูรายละเอียดหน้าพระเครื่องพร้อมเช่า</a></p>
-                </div>
-                ${imageSectionHtml}
-            </div>
-            `;
-            resultDiv.innerHTML = html;
-        } else {
-            resultDiv.innerHTML = `<span style="color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้ในระบบ</span>`;
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบตรวจสอบใบรับรองพระเครื่อง - OAT AMULET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-    } catch (error) {
-        console.error(error);
-        resultDiv.innerHTML = `<span style="color:#ff8080;">เกิดข้อผิดพลาดในการโหลดข้อมูลจากระบบหลังบ้าน</span>`;
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        h1 { color: #d4af37; margin-bottom: 25px; }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        input[type="text"] {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #333;
+            border-radius: 25px;
+            background: #2a2a2a;
+            color: #fff;
+            width: 60%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus { border-color: #d4af37; }
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: #d4af37;
+            color: #121212;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.3s;
+        }
+        button:hover { background: #f1c40f; transform: scale(1.05); }
+        #result { margin-top: 20px; text-align: left; }
+        .result-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            background: #252525;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+        .result-info p { margin: 10px 0; font-size: 16px; line-height: 1.5; }
+        .result-info b { color: #d4af37; }
+        
+        /* Lightbox ส่องรูป */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.show { display: flex; }
+        .lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🔍 ระบบตรวจสอบใบรับประกันพระเครื่อง</h1>
+        <div class="search-box">
+            <input type="text" id="certNo" placeholder="กรอกเลขบัตรรับประกัน เช่น OAT-001">
+            <button onclick="searchCert()">ค้นหาข้อมูล</button>
+        </div>
+        
+        <div id="result">
+            <!-- ข้อมูลพระเครื่องจะมาแสดงตรงนี้ -->
+        </div>
+    </div>
+
+    <!-- Lightbox สำหรับดูรูปขยายใหญ่ -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="ขยายรูป">
+    </div>
+
+    <!-- ส่วนเชื่อมต่อระบบ Firebase หลังบ้าน -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+    // ตั้งค่าคอนฟิก Firebase ให้ตรงกับฐานข้อมูลหลังบ้านของคุณโอ๊ต
+    const firebaseConfig = {
+        apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
+        authDomain: "oat-amulet-shop.firebaseapp.com",
+        projectId: "oat-amulet-shop",
+        storageBucket: "oat-amulet-shop.firebasestorage.app",
+        messagingSenderId: "868077170885",
+        appId: "1:868077170885:web:4a8f79eea590138aa5c0ac",
+        measurementId: "G-GLR77H4VEH"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let currentSlides = [];
+    let currentSlideIndex = 0;
+
+    async function searchCert() {
+        const certInputBox = document.getElementById('certNo');
+        if (!certInputBox) return;
+        
+        const certInput = certInputBox.value.trim().toUpperCase();
+        const resultDiv = document.getElementById('result');
+
+        if (!certInput) {
+            resultDiv.innerHTML = '<p style="text-align:center; color:#ff8080;">กรุณากรอกเลขรับประกัน</p>';
+            return;
+        }
+
+        resultDiv.innerHTML = '<p style="text-align:center;">กำลังค้นหาข้อมูลในระบบฐานข้อมูล...</p>';
+
+        try {
+            const querySnapshot = await db.collection("amulets").where("certNo", "==", certInput).get();
+
+            if (!querySnapshot.empty) {
+                const doc = querySnapshot.docs[0];
+                const data = doc.data();
+                
+                currentSlides = data.certImages || [];
+                currentSlideIndex = 0;
+
+                let imageSectionHtml = '';
+                if (currentSlides.length > 0) {
+                    imageSectionHtml = `
+                        <div class="result-image" style="text-align:center; margin-top:15px;">
+                            <div class="slider" style="position:relative; display:inline-block;">
+                                <img id="certSlideImg" src="${currentSlides[0]}" onclick="openLightbox(this.src)" style="width:100%; max-width:400px; border-radius:10px; border:2px solid #d4af37; cursor:pointer;">
+                                ${currentSlides.length > 1 ? `
+                                    <br>
+                                    <button onclick="changeSlide(-1)" style="padding:5px 15px; margin:5px; font-size:12px;">❮ ก่อนหน้า</button>
+                                    <button onclick="changeSlide(1)" style="padding:5px 15px; margin:5px; font-size:12px;">ถัดไป ❯</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let html = `
+                <div class="result-layout">
+                    <h3 style="color:#d4af37; margin:0; font-size:22px; text-align:center;">✓ พระเครื่ององค์นี้รับประกันแท้จากทางร้าน</h3>
+                    <div class="result-info" style="width: 100%;">
+                        <p><b>เลขรับประกัน :</b> ${data.certNo || '-'}</p>
+                        <p><b>เกจิ / อาจารย์ :</b> ${data.geji || '-'}</p>
+                        <p><b>วัด :</b> ${data.wat || '-'}</p>
+                        <p><b>พิมพ์พระ :</b> ${data.pim || '-'}</p>
+                        <p><b>เนื้อความ :</b> ${data.nuea || '-'}</p>
+                        <p><b>วันที่ออกบัตร :</b> ${data.certDate || '-'}</p>
+                        <p><b>ชื่อเจ้าของพระ :</b> ${data.owner || '-'}</p>
+                        <p><b>ราคาเช่าบูชา :</b> ${data.price || '-'} บาท</p>
+                    </div>
+                    ${imageSectionHtml}
+                </div>
+                `;
+                resultDiv.innerHTML = html;
+            } else {
+                resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้ในระบบ</p>`;
+            }
+        } catch (error) {
+            console.error(error);
+            resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล</p>`;
+        }
     }
-}
 
-// ฟังก์ชันควบคุมสไลด์รูปภาพใบรับรอง
-window.changeSlide = function(direction) {
-    if (currentSlides.length <= 1) return;
-    currentSlideIndex += direction;
-    if (currentSlideIndex >= currentSlides.length) currentSlideIndex = 0;
-    if (currentSlideIndex < 0) currentSlideIndex = currentSlides.length - 1;
-    document.getElementById('certSlideImg').src = currentSlides[currentSlideIndex];
-}
-
-// แก้ไขบั๊กหน้าขาว: ทำการโหลดหน้าเว็บ (DOM) ให้เสร็จก่อนเปิดการทำงานของปุ่ม Enter
-window.onload = function() {
-    const certInputBox = document.getElementById('certNo');
-    if (certInputBox) {
-        certInputBox.addEventListener('keypress', function(e){
-            if (e.key === 'Enter') { searchCert(); }
-        });
+    window.changeSlide = function(direction) {
+        if (currentSlides.length <= 1) return;
+        currentSlideIndex += direction;
+        if (currentSlideIndex >= currentSlides.length) currentSlideIndex = 0;
+        if (currentSlideIndex < 0) currentSlideIndex = currentSlides.length - 1;
+        document.getElementById('certSlideImg').src = currentSlides[currentSlideIndex];
     }
-};
 
-function openLightbox(src){
-    document.getElementById("lightbox-img").src = src;
-    document.getElementById("lightbox").classList.add("show");
-}
+    window.onload = function() {
+        const certInputBox = document.getElementById('certNo');
+        if (certInputBox) {
+            certInputBox.addEventListener('keypress', function(e){
+                if (e.key === 'Enter') { searchCert(); }
+            });
+        }
+    };
 
-function closeLightbox(){
-    document.getElementById("lightbox").classList.remove("show");
-}
-</script>
+    function openLightbox(src){
+        document.getElementById("lightbox-img").src = src;
+        document.getElementById("lightbox").classList.add("show");
+    }
+
+    function closeLightbox(){
+        document.getElementById("lightbox").classList.remove("show");
+    }
+    </script>
+</body>
+</html>

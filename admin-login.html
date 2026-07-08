@@ -25,7 +25,6 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script>
-    // ตั้งค่า Firebase ของคุณโอ๊ตเรียบร้อยแล้ว
     const firebaseConfig = {
         apiKey: "AIzaSyAAZrikwva7Va3v6F4C4TKk1wrZpOlDmEs",
         authDomain: "oat-amulet-shop.firebaseapp.com",
@@ -44,7 +43,7 @@
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             alert("เข้าสู่ระบบสำเร็จ!");
-            window.location.href = "admin-dashboard.html";
+            window.location.href = "admin-edit.html";
         })
         .catch((error) => {
             alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง: " + error.message);

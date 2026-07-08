@@ -2,42 +2,51 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>จัดการข้อมูลหลังบ้าน | โอ๊ต บางชัน</title>
     <style>
         body { background: #1a1a1a; color: #fff; font-family: sans-serif; padding: 20px; }
         .container { max-width: 800px; margin: auto; background: #262626; padding: 25px; border-radius: 12px; border: 1px solid #8b6b1f; }
         input, textarea, select { width: 100%; padding: 10px; margin-bottom: 10px; background: #333; color: #fff; border: 1px solid #555; border-radius: 5px; box-sizing: border-box; }
-        button { background: #d4af37; color: #000; padding: 12px; border: none; width: 100%; font-weight: bold; cursor: pointer; border-radius: 5px; }
-        .section-header { color: #d4af37; border-bottom: 1px solid #555; margin: 20px 0 10px 0; padding-bottom: 5px; font-weight: bold; }
+        button { background: #d4af37; color: #000; padding: 12px; border: none; width: 100%; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 10px; }
+        .logout-btn { background: #b30000; color: #fff; }
+        .hidden { display: none; }
+        .section-header { color: #d4af37; border-bottom: 1px solid #555; margin: 20px 0 10px 0; font-weight: bold; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h2>➕ เพิ่มข้อมูลใหม่</h2>
-        <label>ประเภท:</label>
-        <select id="dataType">
+        <select id="dataType" onchange="toggleFields()">
             <option value="forSale">พระเครื่องพร้อมเช่าบูชา</option>
-            <option value="certificate">ข้อมูลตรวจสอบใบรับประกัน</option>
+            <option value="certificate">ระบบตรวจสอบใบรับประกัน</option>
         </select>
         
-        <div class="section-header">ข้อมูลทั่วไป</div>
-        <input type="text" id="name" placeholder="ชื่อพระ / ชื่อรายการ">
-        <textarea id="description" placeholder="รายละเอียด"></textarea>
-        
-        <div class="section-header">ข้อมูลระบบตรวจสอบ</div>
-        <input type="text" id="certNo" placeholder="เลขรับประกัน (เช่น OBC-0000)">
-        <input type="text" id="geji" placeholder="ชื่อหลวงพ่อ / เกจิ">
-        <input type="text" id="wat" placeholder="วัด">
-        
-        <div class="section-header">รูปภาพ (ใส่ลิงก์ URL)</div>
+        <div id="fieldsForSale">
+            <div class="section-header">ข้อมูลพระพร้อมบูชา</div>
+            <input type="text" id="name" placeholder="ชื่อพระ">
+            <input type="text" id="price" placeholder="ราคา">
+            <textarea id="description" placeholder="รายละเอียด"></textarea>
+        </div>
+
+        <div id="fieldsCert" class="hidden">
+            <div class="section-header">ข้อมูลบัตรรับรอง</div>
+            <input type="text" id="certNo" placeholder="เลขรับประกัน">
+            <input type="text" id="geji" placeholder="เกจิ/อาจารย์">
+            <input type="text" id="wat" placeholder="วัด">
+            <input type="text" id="pim" placeholder="พิมพ์พระ">
+            <input type="text" id="nuea" placeholder="เนื้อพระ">
+            <input type="text" id="certDate" placeholder="วันที่ออกบัตร">
+            <input type="text" id="owner" placeholder="ชื่อเจ้าของพระ">
+        </div>
+
+        <div class="section-header">รูปภาพ (ใส่ URL)</div>
         <input type="text" id="img1" placeholder="รูปที่ 1">
         <input type="text" id="img2" placeholder="รูปที่ 2">
         <input type="text" id="img3" placeholder="รูปที่ 3">
         <input type="text" id="img4" placeholder="รูปที่ 4">
         
         <button onclick="saveData()">บันทึกข้อมูล</button>
+        <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -56,30 +65,38 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        function saveData() {
-            const imagesArray = [
-                document.getElementById("img1").value,
-                document.getElementById("img2").value,
-                document.getElementById("img3").value,
-                document.getElementById("img4").value
-            ].filter(url => url !== "");
+        function toggleFields() {
+            const type = document.getElementById("dataType").value;
+            document.getElementById("fieldsForSale").classList.toggle("hidden", type !== "forSale");
+            document.getElementById("fieldsCert").classList.toggle("hidden", type !== "certificate");
+        }
 
+        function saveData() {
+            const type = document.getElementById("dataType").value;
             const data = {
-                dataType: document.getElementById("dataType").value,
-                name: document.getElementById("name").value,
-                description: document.getElementById("description").value,
-                certNo: document.getElementById("certNo").value.trim().toUpperCase(),
-                geji: document.getElementById("geji").value,
-                wat: document.getElementById("wat").value,
-                images: imagesArray,
-                certImages: imagesArray,
+                dataType: type,
+                images: [document.getElementById("img1").value, document.getElementById("img2").value, document.getElementById("img3").value, document.getElementById("img4").value].filter(Boolean),
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
+            
+            if(type === 'forSale') {
+                data.name = document.getElementById("name").value;
+                data.price = document.getElementById("price").value;
+                data.description = document.getElementById("description").value;
+            } else {
+                data.certNo = document.getElementById("certNo").value.trim().toUpperCase();
+                data.geji = document.getElementById("geji").value;
+                data.wat = document.getElementById("wat").value;
+                data.pim = document.getElementById("pim").value;
+                data.nuea = document.getElementById("nuea").value;
+                data.certDate = document.getElementById("certDate").value;
+                data.owner = document.getElementById("owner").value;
+            }
 
-            db.collection("amulets").add(data)
-            .then(() => { alert("บันทึกสำเร็จ!"); location.reload(); })
-            .catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
+            db.collection("amulets").add(data).then(() => { alert("บันทึกสำเร็จ!"); location.reload(); });
         }
+
+        function logout() { firebase.auth().signOut().then(() => window.location.href = "admin-login.html"); }
     </script>
 </body>
 </html>

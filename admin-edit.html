@@ -95,6 +95,7 @@
     auth.onAuthStateChanged(user => {
         if (!user) { 
             if (!document.getElementById("logoutSuccessBox")) {
+                // แก้ไขให้รองรับชื่อไฟล์กรณีลิงก์เด้งหลุดกลับหน้าล็อกอิน
                 window.location.href = "admin-login.html"; 
             }
         } else { 
@@ -291,8 +292,8 @@
                     <h2 style="color: #d4af37; margin-bottom: 20px; border-bottom: none; padding-bottom: 0;">🔒 ออกจากระบบเรียบร้อยแล้ว</h2>
                     <p style="color: #aaa; margin-bottom: 30px; font-size: 15px;">คุณได้ออกจากระบบจัดการหลังบ้านเรียบร้อยแล้วครับ</p>
                     
-                    <a href="amulet.html" style="display: inline-block; background: #d4af37; color: #000; font-weight: bold; text-decoration: none; padding: 12px 30px; border-radius: 6px; transition: 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.2);">
-                        🏠 กลับไปหน้าพระเครื่องพร้อมเช่า
+                    <a href="index.html" style="display: inline-block; background: #d4af37; color: #000; font-weight: bold; text-decoration: none; padding: 12px 30px; border-radius: 6px; transition: 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.2);">
+                        🏠 กลับไปหน้าค้นหาพระเครื่อง
                     </a>
                 </div>
             `;

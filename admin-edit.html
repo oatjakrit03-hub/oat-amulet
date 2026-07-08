@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>➕ เพิ่มข้อมูลใหม่</h2>
+        <h2 id="formTitle">➕ เพิ่มข้อมูลใหม่</h2>
         <select id="dataType" onchange="toggleFields()">
             <option value="forSale">พระเครื่องพร้อมเช่าบูชา</option>
             <option value="certificate">ระบบตรวจสอบใบรับประกัน</option>
@@ -45,7 +45,7 @@
         <input type="text" id="img3" placeholder="รูปที่ 3">
         <input type="text" id="img4" placeholder="รูปที่ 4">
         
-        <button onclick="saveData()">บันทึกข้อมูล</button>
+        <button onclick="saveData()" id="saveBtn">บันทึกข้อมูล</button>
         <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
     </div>
 
@@ -65,6 +65,35 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const docId = urlParams.get('id');
+
+        if (docId) {
+            document.getElementById("formTitle").innerText = "✏️ แก้ไขข้อมูล";
+            document.getElementById("saveBtn").innerText = "อัปเดตข้อมูล";
+            db.collection("amulets").doc(docId).get().then((doc) => {
+                const data = doc.data();
+                document.getElementById("dataType").value = data.dataType;
+                toggleFields();
+                if(data.dataType === 'forSale') {
+                    document.getElementById("name").value = data.name || "";
+                    document.getElementById("price").value = data.price || "";
+                    document.getElementById("description").value = data.description || "";
+                } else {
+                    document.getElementById("certNo").value = data.certNo || "";
+                    document.getElementById("geji").value = data.geji || "";
+                    document.getElementById("wat").value = data.wat || "";
+                    document.getElementById("pim").value = data.pim || "";
+                    document.getElementById("nuea").value = data.nuea || "";
+                    document.getElementById("certDate").value = data.certDate || "";
+                    document.getElementById("owner").value = data.owner || "";
+                }
+                if(data.images) {
+                    data.images.forEach((img, i) => { if(document.getElementById("img"+(i+1))) document.getElementById("img"+(i+1)).value = img; });
+                }
+            });
+        }
+
         function toggleFields() {
             const type = document.getElementById("dataType").value;
             document.getElementById("fieldsForSale").classList.toggle("hidden", type !== "forSale");
@@ -75,8 +104,7 @@
             const type = document.getElementById("dataType").value;
             const data = {
                 dataType: type,
-                images: [document.getElementById("img1").value, document.getElementById("img2").value, document.getElementById("img3").value, document.getElementById("img4").value].filter(Boolean),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                images: [document.getElementById("img1").value, document.getElementById("img2").value, document.getElementById("img3").value, document.getElementById("img4").value].filter(Boolean)
             };
             
             if(type === 'forSale') {
@@ -93,7 +121,12 @@
                 data.owner = document.getElementById("owner").value;
             }
 
-            db.collection("amulets").add(data).then(() => { alert("บันทึกสำเร็จ!"); location.reload(); });
+            if (docId) {
+                db.collection("amulets").doc(docId).update(data).then(() => { alert("อัปเดตสำเร็จ!"); window.location.href = "admin-list.html"; });
+            } else {
+                data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                db.collection("amulets").add(data).then(() => { alert("บันทึกสำเร็จ!"); window.location.href = "admin-list.html"; });
+            }
         }
 
         function logout() { firebase.auth().signOut().then(() => window.location.href = "admin-login.html"); }

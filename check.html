@@ -17,6 +17,13 @@
         .result-layout { display: flex; flex-direction: column; gap: 20px; align-items: center; background: #252525; padding: 20px; border-radius: 10px; border: 1px solid #444; }
         .result-info p { margin: 10px 0; font-size: 16px; line-height: 1.5; }
         .result-info b { color: #d4af37; }
+        
+        /* สไตล์ของ Thumbnails เพิ่มเติมในระบบใบรับประกัน */
+        .cert-thumb-container { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+        .cert-thumb-img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 1px solid #8b6b1f; cursor: pointer; opacity: 0.7; transition: 0.2s; }
+        .cert-thumb-img:hover, .cert-thumb-img.active { opacity: 1; border-color: #d4af37; }
+        .img-count { font-size: 13px; color: #aaa; margin-top: 5px; }
+
         .lightbox { display: none; position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .lightbox.show { display: flex; }
         .lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
@@ -78,13 +85,24 @@
                 currentSlides = data.images || [];
                 currentSlideIndex = 0;
 
+                // สร้าง HTML ของ Thumbnails และข้อมูลรูปทั้งหมดที่มี
+                let thumbsHtml = '';
+                if(currentSlides.length > 0) {
+                    thumbsHtml = `<div class="cert-thumb-container">`;
+                    currentSlides.forEach((img, index) => {
+                        thumbsHtml += `<img src="${img}" class="cert-thumb-img ${index === 0 ? 'active' : ''}" onclick="selectSlide(${index})" alt="รูปย่อที่ ${index+1}">`;
+                    });
+                    thumbsHtml += `</div><div class="img-count">(มีรูปภาพทั้งหมด ${currentSlides.length} รูป)</div>`;
+                }
+
                 let imageSectionHtml = currentSlides.length > 0 ? `
-                    <div style="text-align:center; margin-top:15px;">
+                    <div style="text-align:center; margin-top:15px; width: 100%;">
                         <img id="certSlideImg" src="${currentSlides[0]}" onclick="openLightbox(this.src)" style="width:100%; max-width:400px; border-radius:10px; border:2px solid #d4af37; cursor:pointer;">
                         ${currentSlides.length > 1 ? `
                             <br><button onclick="changeSlide(-1)" style="padding:5px 15px; margin:5px; font-size:12px;">❮</button>
                             <button onclick="changeSlide(1)" style="padding:5px 15px; margin:5px; font-size:12px;">❯</button>
                         ` : ''}
+                        ${thumbsHtml}
                     </div>
                 ` : '';
 
@@ -107,14 +125,32 @@
                 resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้</p>`;
             }
         } catch (error) {
-            resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">เกิดข้อผิดพลาดในการค้นหา</p>`;
+            resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">เกิดข้อผิดพลาดในการค้นหา</p>';
         }
     }
 
     window.changeSlide = function(direction) {
         currentSlideIndex = (currentSlideIndex + direction + currentSlides.length) % currentSlides.length;
-        document.getElementById('certSlideImg').src = currentSlides[currentSlideIndex];
+        updateSlideDisplay();
     }
+
+    window.selectSlide = function(index) {
+        currentSlideIndex = index;
+        updateSlideDisplay();
+    }
+
+    function updateSlideDisplay() {
+        document.getElementById('certSlideImg').src = currentSlides[currentSlideIndex];
+        const thumbs = document.querySelectorAll('.cert-thumb-img');
+        thumbs.forEach((thumb, idx) => {
+            if(idx === currentSlideIndex) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
+        });
+    }
+
     function openLightbox(src){ document.getElementById("lightbox-img").src = src; document.getElementById("lightbox").classList.add("show"); }
     function closeLightbox(){ document.getElementById("lightbox").classList.remove("show"); }
     </script>

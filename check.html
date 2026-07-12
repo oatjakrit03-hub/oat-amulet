@@ -75,9 +75,9 @@
         resultDiv.innerHTML = '<p style="text-align:center;">กำลังค้นหา...</p>';
 
         try {
+            // ปรับแก้: ค้นหาโดยใช้เงื่อนไขเลขที่บัตรตรงๆ อย่างเดียว เพื่อเลี่ยงปัญหา Error (No Index) ของ Firebase
             const querySnapshot = await db.collection("amulets")
                 .where("certNo", "==", certInput)
-                .where("dataType", "==", "certificate")
                 .get();
 
             if (!querySnapshot.empty) {
@@ -125,7 +125,8 @@
                 resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">ไม่พบข้อมูลเลขรับประกันนี้</p>`;
             }
         } catch (error) {
-            resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">เกิดข้อผิดพลาดในการค้นหา</p>';
+            console.error("Search Error: ", error);
+            resultDiv.innerHTML = `<p style="text-align:center; color:#ff8080;">เกิดข้อผิดพลาดในการค้นหา</p>`;
         }
     }
 

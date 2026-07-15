@@ -9,17 +9,12 @@
         input, textarea, select { width: 100%; padding: 10px; margin-bottom: 10px; background: #333; color: #fff; border: 1px solid #555; border-radius: 5px; box-sizing: border-box; }
         button { background: #d4af37; color: #000; padding: 12px; border: none; width: 100%; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 10px; }
         .logout-btn { background: #b30000; color: #fff; }
-        .list-btn { background: #444; color: #fff; text-align: center; text-decoration: none; display: block; padding: 12px; border-radius: 5px; font-weight: bold; margin-bottom: 15px; border: 1px solid #8b6b1f; }
-        .list-btn:hover { background: #555; }
         .hidden { display: none; }
         .section-header { color: #d4af37; border-bottom: 1px solid #555; margin: 20px 0 10px 0; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- เพิ่มปุ่มสำหรับข้ามไปเลือกแก้ไขเฉพาะรายการองค์หลักได้ทันที -->
-        <a href="admin-list.html" class="list-btn">📁 ไปที่หน้ารายการข้อมูลทั้งหมด (เลือกแก้ไขรายองค์)</a>
-
         <h2 id="formTitle">➕ เพิ่มข้อมูลใหม่</h2>
         <select id="dataType" onchange="toggleFields()">
             <option value="forSale">พระเครื่องพร้อมเช่าบูชา</option>
@@ -31,6 +26,13 @@
             <input type="text" id="name" placeholder="ชื่อพระ">
             <input type="text" id="price" placeholder="ราคา">
             <textarea id="description" placeholder="รายละเอียด"></textarea>
+            
+            <!-- เพิ่มส่วนเลือกสถานะพระเครื่องตรงนี้ -->
+            <div class="section-header">สถานะพระเครื่อง</div>
+            <select id="status">
+                <option value="available">🟢 พร้อมเช่าบูชา</option>
+                <option value="sold">🔴 มีผู้เช่าบูชาแล้ว</option>
+            </select>
         </div>
 
         <div id="fieldsCert" class="hidden">
@@ -42,7 +44,7 @@
             <input type="text" id="nuea" placeholder="เนื้อพระ">
             <input type="text" id="certDate" placeholder="วันที่ออกบัตร">
             <input type="text" id="owner" placeholder="ชื่อเจ้าของพระ">
-            <input type="text" id="certPrice" placeholder="ราคาเช่าบูชา">
+            <input type="text" id="certPrice" placeholder="ราคาเช่าบูชา"> <!-- เพิ่มช่องกรอกราคาใบรับประกัน -->
         </div>
 
         <div class="section-header">รูปภาพ (ใส่ URL)</div>
@@ -85,6 +87,8 @@
                     document.getElementById("name").value = data.name || "";
                     document.getElementById("price").value = data.price || "";
                     document.getElementById("description").value = data.description || "";
+                    // ดึงค่าสถานะเดิมมาแสดงในตัวเลือก (ถ้าไม่มีให้เป็น available)
+                    document.getElementById("status").value = data.status || "available";
                 } else {
                     document.getElementById("certNo").value = data.certNo || "";
                     document.getElementById("geji").value = data.geji || "";
@@ -93,7 +97,7 @@
                     document.getElementById("nuea").value = data.nuea || "";
                     document.getElementById("certDate").value = data.certDate || "";
                     document.getElementById("owner").value = data.owner || "";
-                    document.getElementById("certPrice").value = data.price || "";
+                    document.getElementById("certPrice").value = data.price || ""; // ดึงราคาใบรับประกัน
                 }
                 if(data.images) {
                     data.images.forEach((img, i) => { if(document.getElementById("img"+(i+1))) document.getElementById("img"+(i+1)).value = img; });
@@ -118,6 +122,8 @@
                 data.name = document.getElementById("name").value;
                 data.price = document.getElementById("price").value;
                 data.description = document.getElementById("description").value;
+                // ส่งค่าสถานะที่เลือกไปบันทึกในฐานข้อมูลด้วย
+                data.status = document.getElementById("status").value;
             } else {
                 data.certNo = document.getElementById("certNo").value.trim().toUpperCase();
                 data.geji = document.getElementById("geji").value;
@@ -126,7 +132,7 @@
                 data.nuea = document.getElementById("nuea").value;
                 data.certDate = document.getElementById("certDate").value;
                 data.owner = document.getElementById("owner").value;
-                data.price = document.getElementById("certPrice").value;
+                data.price = document.getElementById("certPrice").value; // บันทึกราคาใบรับประกัน
             }
 
             if (docId) {
@@ -137,14 +143,7 @@
             }
         }
 
-        // ปรับแก้ให้ Logout แล้วกลับไปหน้า admin-login.html ชัวร์ๆ ครับคุณโอ๊ต
-        function logout() { 
-            firebase.auth().signOut().then(() => { 
-                window.location.href = "admin-login.html"; 
-            }).catch((error) => {
-                alert("เกิดข้อผิดพลาด: " + error.message);
-            }); 
-        }
+        function logout() { firebase.auth().signOut().then(() => window.location.href = "admin-login.html"); }
     </script>
 </body>
 </html>
